@@ -3,8 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Audit de code pour les apps créées avec l’IA | Kevin Ley</title>
-<meta name="description" content="Vous avez créé votre app avec l’IA&#8239;? Kevin Ley, développeur full-stack senior, examine en profondeur votre code et votre produit, essaie de casser votre app et vous donne un plan pour la rendre plus robuste. 120&nbsp;€ de l’heure, hors TVA.">
+<meta name="description" content="Votre app créée avec l’IA&#8239;? Kevin Ley, développeur full-stack senior, examine votre code, essaie de la casser et planifie les corrections. 120&nbsp;€/h hors TVA.">
 <link rel="canonical" href="https://kevinley.github.io/fr/">
 <link rel="alternate" hreflang="en" href="https://kevinley.github.io/">
 <link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/">
@@ -13,7 +15,10 @@
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0e0e0d">
 <meta name="color-scheme" content="dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0e0d'/%3E%3Ccircle cx='10.5' cy='16' r='5.5' fill='%23ff7a3d'/%3E%3Ccircle cx='21.5' cy='16' r='5.5' fill='%234da3ff'/%3E%3C/svg%3E">
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kevinley.github.io/fr/">
@@ -36,19 +41,29 @@
 
 <link rel="preload" href="../fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/inter-tight-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../styles.css?v=2">
+<link rel="stylesheet" href="../styles.css?v=3">
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://kevinley.github.io/#website",
+      "name": "Kevin Ley",
+      "url": "https://kevinley.github.io/",
+      "inLanguage": ["en", "de", "fr"],
+      "publisher": { "@id": "https://kevinley.github.io/#person" }
+    },
+    {
       "@type": "Person",
       "@id": "https://kevinley.github.io/#person",
       "name": "Kevin Ley",
       "url": "https://kevinley.github.io/fr/",
       "jobTitle": "Développeur full-stack senior",
+      "image": "https://kevinley.github.io/assets/kevin-1024.jpg",
       "address": { "@type": "PostalAddress", "addressCountry": "LU" },
+      "knowsAbout": ["Revue de code", "Tests automatisés", "Tests de bout en bout", "JavaScript", "TypeScript", "Applications SaaS", "Applications mobiles", "Outils de développement IA", "Direction d’équipes de développement"],
       "email": "mailto:hello@kevinley.dev"
     },
     {
@@ -60,6 +75,36 @@
       "inLanguage": "fr",
       "provider": { "@id": "https://kevinley.github.io/#person" },
       "description": "Kevin Ley audite les apps que des fondateurs ont créées avec des outils d’IA comme Lovable, Bolt, Cursor ou Claude. Il examine en profondeur le code et le produit, essaie de casser l’app, classe chaque constat par gravité et livre un plan par ordre de priorité. Chaque constat décrit le problème, les étapes pour le reproduire et des pistes pour le corriger. Il peut aussi corriger les problèmes avec le fondateur ou pour lui. Ce n’est pas un test de sécurité certifié, mais les constats de sécurité sont inclus.",
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Audits d’app",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Audit express",
+              "description": "Un audit à un prix d’entrée convenu à l’avance : les constats les plus importants, classés par gravité, en quelques jours."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Audit approfondi",
+              "description": "Un examen de chaque partie du code et du produit, avec un plan complet par ordre de priorité."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Corrections",
+              "description": "Corriger ce qui compte le plus, avec le fondateur ou pour lui, à 120 € de l’heure hors TVA."
+            }
+          }
+        ]
+      },
       "offers": {
         "@type": "Offer",
         "priceSpecification": { "@type": "UnitPriceSpecification", "price": 120, "priceCurrency": "EUR", "unitCode": "HUR", "valueAddedTaxIncluded": false }
@@ -473,6 +518,7 @@ Créneaux possibles pour un premier appel&nbsp;:
   <div class="wrap">
     <div class="foot__inner">
       <span>© 2026 Kevin Ley</span>
+      <nav class="foot__lang" aria-label="Langue"><a href="../" hreflang="en" lang="en">English</a> <a href="../de/" hreflang="de" lang="de">Deutsch</a> <a href="./" hreflang="fr" lang="fr" aria-current="page">Français</a></nav>
       <span>Prix hors TVA</span>
     </div>
   </div>

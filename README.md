@@ -34,24 +34,39 @@ The site is live about a minute later. `.nojekyll` tells Pages to serve the file
 
 Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 
-- **Email:** `hello@kevinley.dev` is a placeholder. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD.
+- **Email:** `hello@kevinley.dev` is a placeholder. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD. It is also the contact in `.well-known/security.txt`.
 - **Email draft:** all three mail buttons open the same draft. Its text lives in `<template id="mail-draft">` on each page, so you can edit it there. The script puts the self-check count where `{count}` is.
 - **Booking link:** commented out in the contact section until it exists.
 - **Quote:** commented out under "Who's looking at your app" until there is a real one.
 - **Legal notice:** business name, address and VAT number in the footer.
+- **Profiles:** the `Person` in the JSON-LD has no `sameAs` yet. Add the profiles you want search engines and AI tools to tie to you (LinkedIn, GitHub…).
+- **security.txt:** renew `Expires` in `.well-known/security.txt` before 21 Nov 2027.
 
 ## Moving to your own domain
 
 1. Add a `CNAME` file containing the domain, for example `kevinley.dev`.
 2. Point the domain's DNS at GitHub Pages, then tick "Enforce HTTPS" in the repo settings.
-3. Replace `https://kevinley.github.io/` with the new address in `index.html`, `de/index.html` and `fr/index.html` (canonical, hreflang, Open Graph, JSON-LD), `robots.txt` and `sitemap.xml`.
+3. Replace `https://kevinley.github.io/` with the new address in `index.html`, `de/index.html` and `fr/index.html` (canonical, hreflang, Open Graph, JSON-LD), `robots.txt`, `sitemap.xml`, `llms.txt` and `.well-known/security.txt`.
+4. Things GitHub Pages can't do, that your own domain behind a CDN such as Cloudflare can: response headers (`X-Frame-Options` or CSP `frame-ancestors`, `X-Content-Type-Options: nosniff`, `Permissions-Policy`), long cache times for the `?v=` files, fonts and images, and the email records DMARC and MTA-STS for the domain.
+
+## Search engines and AI tools
+
+- **Structured data (JSON-LD, in each page's head):** `WebSite`, `Person` (photo, country, areas of expertise in `knowsAbout`), `Service` (hourly rate, the three offers in `hasOfferCatalog`) and `FAQPage`. The same facts as the visible page, in the page's language. When the page changes, change these too.
+- **`llms.txt`:** a plain summary of the site for AI tools, with links to the three languages and the sections. Written only from what the page says; keep it in step.
+- **`robots.txt`:** everyone may crawl everything. AI search and answer crawlers (OpenAI, Anthropic, Perplexity) are named in their own group, so their access is explicit.
+- **Icons:** `favicon.ico` (16, 32, 48 px), `favicon.svg`, `apple-touch-icon.png` (180 px) and the icons in `site.webmanifest` (`assets/icon-*.png`).
+- **Content-Security-Policy and Referrer-Policy** are `<meta>` tags, because GitHub Pages can't send headers. The CSP allows only files from this site, plus inline `style` attributes (the flame chips) and the one inline script that adds the `js` class, by its hash. **If you change that inline script, update its `sha256-…` in the CSP**, or it stops running (the same goes for the script in `404.html`). Print the new hash with:
+
+  ```sh
+  printf 'document.documentElement.classList.add("js")' | openssl dgst -sha256 -binary | openssl base64
+  ```
 
 ## Speed
 
 | | Budget (gzip) | Now |
 |---|---|---|
-| HTML | 15 KB | 8.0 KB (English), 9.0 KB (German), 8.8 KB (French) |
-| CSS | 14 KB | 10.6 KB |
+| HTML | 15 KB | 8.5 KB (English), 9.4 KB (German), 9.3 KB (French) |
+| CSS | 14 KB | 10.7 KB |
 | JS the page needs | 4 KB | 2.1 KB (`script.js`) |
 | JS for the effects | – | 5.8 KB (`fire.js`, deferred, never blocks the first paint) |
 | Font files | 2 | 2 (Inter Tight latin, regular + italic, 69 KB) |

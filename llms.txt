@@ -1,0 +1,40 @@
+# Kevin Ley
+
+> Kevin Ley is a senior full-stack engineer who reviews apps that founders built with AI tools such as Lovable, Bolt, Cursor or Claude. He takes a deep look at the code and the product, tries to break the app, sorts every finding by severity and delivers a plan in order of priority. €120 per hour, excluding VAT.
+
+The site is one page, in English, German and French. The same content is on all three.
+
+- [App reviews for founders who built with AI](https://kevinley.github.io/): English
+- [Code-Review für Apps, die mit KI gebaut wurden](https://kevinley.github.io/de/): German
+- [Audit de code pour les apps créées avec l’IA](https://kevinley.github.io/fr/): French
+
+## What he does with an app
+
+- [How it works](https://kevinley.github.io/#how): he reads the code and uses the app the way customers do, tries what users might do and a few things they shouldn't, gives every finding a severity (critical, high, medium, low), and puts the findings in order: what to fix now, what next, and what can wait.
+- Each finding shows the problem, the steps to see it yourself, and ways to fix it, in plain words, with technical details for whoever fixes it.
+- It is not a certified security test, but security problems found during the review are in the report.
+
+## How a project runs, and what it costs
+
+- [Prices](https://kevinley.github.io/#prices): €120 per hour, excluding VAT. Every project starts small, and after each step the client decides whether to go further.
+- 1. A first call: getting to know each other, seeing the product, deciding what matters most.
+- 2. A quick review, for an entry price agreed first: the most important findings, sorted, in a few days. Example: about 8 hours, €960.
+- 3. A second call to go through the findings.
+- 4. The deep review: every part of the code and the product, and a full plan in order of priority. Example: about 30 hours, €3,600, days to weeks.
+- 5. Fixing it together, with the client or for them, at the same hourly rate. Example: deep review and fixes, about 80 hours, €9,600, weeks to months.
+- Scope and price are always agreed before work starts. A fixed project price is possible when the work is defined up front. He works on one project at a time, next to his main job.
+
+## Who he is
+
+- [Who's looking at your app](https://kevinley.github.io/#why): building for the web since 2008, with deep experience across many SaaS apps and mobile apps.
+- He wrote the code review rules his team follows, set up its first automated tests that use the app the way a customer does, and set up the AI coding tools for the whole team.
+- He leads a team of three to five developers at a SaaS company, and grew a team from 2 to 15 developers in under two years.
+- No client names are published: he cares about confidentiality and discretion, signs an NDA on request, and hands over everything that belongs to the client at the end.
+
+## Questions
+
+- [Questions before you write](https://kevinley.github.io/#questions): rewrites (only when the code is near impossible to untangle and too risky for production, and then he plans the rebuild), working with non-technical founders (yes), technologies (any stack, as long as it is JavaScript or TypeScript), timing, and fixes.
+
+## Contact
+
+- [Contact](https://kevinley.github.io/#contact): by email, with a sentence about what was built and what is needed, the link to the app, the count from the ten questions on the page, and a few times for a first call.

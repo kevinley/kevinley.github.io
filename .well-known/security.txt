@@ -1,0 +1,5 @@
+# TODO: hello@kevinley.dev is a placeholder, like on the pages. Replace it, and renew Expires before it passes.
+Contact: mailto:hello@kevinley.dev
+Expires: 2027-11-21T00:00:00.000Z
+Preferred-Languages: en, de, fr
+Canonical: https://kevinley.github.io/.well-known/security.txt

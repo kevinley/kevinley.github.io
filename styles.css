@@ -1019,6 +1019,9 @@ html.is-burning, html.is-burning * { cursor: none !important; }
   font: 400 12px/1.5 var(--mono);
   color: var(--ink-3);
 }
+.foot__lang { display: flex; gap: 14px; }
+.foot__lang a { color: var(--ink-3); transition: color .3s var(--ease); }
+.foot__lang a:hover, .foot__lang [aria-current] { color: var(--ink); }
 
 /* =========================================================
    Reveal + reduced motion
