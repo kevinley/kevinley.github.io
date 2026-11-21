@@ -1,0 +1,959 @@
+/* =========================================================
+   Fonts — self-hosted, latin only. One variable file covers 400–500,
+   one file for the 500 italic. Mono labels use the device's own monospace.
+   The fallback face is Arial resized to Inter Tight's metrics, so nothing
+   jumps when the real font arrives.
+   ========================================================= */
+@font-face {
+  font-family: "Inter Tight";
+  src: url(fonts/inter-tight.woff2) format("woff2");
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Tight";
+  src: url(fonts/inter-tight-italic.woff2) format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inter Tight Fallback";
+  src: local("Arial"), local("ArialMT"), local("Helvetica");
+  /* Measured: Inter Tight runs 4.1% (400) to 2.2% (500) narrower than Arial. */
+  size-adjust: 96.8%;
+  ascent-override: 100.1%;
+  descent-override: 24.9%;
+  line-gap-override: 0%;
+}
+
+/* =========================================================
+   Tokens
+   Every color, size and curve lives here.
+   ========================================================= */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg: #0e0e0d;
+  --bg-2: #141413;
+  --bg-3: #1a1917;
+  --card: #141312;
+  --card-hi: #191816;
+
+  /* Ink */
+  --ink: #f2efe9;
+  --ink-2: rgba(242, 239, 233, .62);
+  --ink-3: rgba(242, 239, 233, .48);
+  --ink-4: rgba(242, 239, 233, .20);
+
+  /* Lines */
+  --divider: rgba(242, 239, 233, .10);
+  --divider-hi: rgba(242, 239, 233, .18);
+  --divider-2: rgba(242, 239, 233, .05);
+  --edge: rgba(255, 255, 255, .06);
+
+  /* Accent */
+  --accent: #e9a97f;
+  --accent-soft: rgba(233, 169, 127, .12);
+  --accent-line: rgba(233, 169, 127, .28);
+
+  /* Severity: semantic, separate from the accent */
+  --sev-crit: #ff7a5c;
+  --sev-high: #ffb04a;
+  --sev-med: #e6d38a;
+  --sev-low: rgba(242, 239, 233, .55);
+  --ok: #8fcf9c;
+
+  /* Hero flames: fire = break it, ice = fix it */
+  --fire-ink: #ff9a6b;
+  --fire-light: rgba(255, 110, 40, .55);
+  --fire-glow: rgba(255, 91, 31, .45);
+  --fire-line: rgba(255, 120, 60, .38);
+  --fire-core: #fff1d0;
+  --fire-1: #ffb04a;
+  --fire-2: #ff5b1f;
+  --fire-3: #b3200c;
+  --ice-ink: #8cc4ff;
+  --ice-light: rgba(60, 150, 255, .55);
+  --ice-glow: rgba(47, 139, 255, .45);
+  --ice-line: rgba(90, 160, 255, .38);
+  --ice-core: #e8f6ff;
+  --ice-1: #7cd0ff;
+  --ice-2: #2f8bff;
+  --ice-3: #1838c9;
+  --chip-bg: rgba(20, 19, 18, .84);
+  /* WebGL flame ramp: R G B multipliers, then R G B exponents of heat */
+  --gl-fire: 1.7 1.25 1.0 1 2 4;
+  --gl-ice: 1.2 1.35 1.7 4 2 1;
+
+  /* Atmosphere */
+  --halo: radial-gradient(ellipse 40vw 50vh at 85% 0%, rgba(233, 169, 127, .06), transparent 70%);
+  --scrim: rgba(14, 14, 13, .78);
+
+  /* Shape and rhythm */
+  --r-pill: 999px;
+  --r-card: 18px;
+  --r-well: 14px;
+  --r-chip: 8px;
+  --max: 1280px;
+  /* Line lengths: lede-size text, then body-size text */
+  --measure-lede: 70ch;
+  --measure: 88ch;
+  --rail: clamp(40px, 6vw, 72px);
+  --gutter: clamp(20px, 5vw, 56px);
+  --bar-h: 48px;
+  --stage: min(clamp(320px, 58vw, 700px), calc(100vw - 40px));
+
+  /* Type */
+  --sans: "Inter Tight", "Inter Tight Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --fs-hero: clamp(42px, 6.6vw, 96px);
+  --fs-title: clamp(30px, 4.4vw, 56px);
+  --fs-step: clamp(22px, 2.4vw, 30px);
+  --fs-lede: clamp(19px, 1.9vw, 26px);
+  --fs-body: clamp(16px, 1.05vw, 18px);
+  --fs-small: clamp(14.5px, .95vw, 16px);
+
+  /* Easing */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --ease-soft: cubic-bezier(.16, 1, .3, 1);
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--bg); scroll-padding-top: calc(var(--bar-h) + 24px); }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 var(--fs-body)/1.55 var(--sans);
+  letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: var(--halo);
+  pointer-events: none;
+  z-index: -1;
+}
+a { color: inherit; text-decoration: none; }
+p, h1, h2, h3, h4 { margin: 0; }
+em { font-style: italic; font-weight: 500; color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.wrap {
+  position: relative;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+.sr {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+.skip {
+  position: absolute; left: 16px; top: -60px; z-index: 30;
+  padding: 10px 14px; border-radius: var(--r-pill);
+  background: var(--ink); color: var(--bg); font-weight: 500;
+}
+.skip:focus { top: 12px; }
+
+/* =========================================================
+   Bar — name and three plain links, sticky
+   ========================================================= */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--scrim);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--divider-2);
+}
+.bar__inner { display: flex; align-items: center; gap: 16px; min-height: var(--bar-h); }
+.bar__brand { font-weight: 500; letter-spacing: -.02em; }
+.bar__nav { display: flex; gap: clamp(16px, 2.4vw, 28px); margin-left: auto; font-size: var(--fs-small); }
+.bar__link { color: var(--ink-2); transition: color .3s var(--ease); }
+.bar__link:hover { color: var(--ink); }
+@media (max-width: 560px) { .bar__link--wide { display: none; } }
+
+/* =========================================================
+   Hero — the offer and two buttons, the line about the two hands, then the
+   photo with the two flames. Stacked and centered at every width.
+   ========================================================= */
+.hero { position: relative; padding-top: clamp(36px, 6vw, 72px); overflow-x: clip; }
+.hero__grid {
+  display: grid;
+  grid-template-areas: "copy" "caption" "stage";
+  justify-items: center;
+  text-align: center;
+}
+.hero__copy { grid-area: copy; display: grid; justify-items: center; }
+.hero__caption { grid-area: caption; }
+.hero__eyebrow {
+  padding: 7px 14px;
+  border: 1px solid var(--divider); border-radius: var(--r-pill);
+  background: var(--card);
+  font: 500 12px/1.3 var(--mono); color: var(--ink-2);
+  text-wrap: balance;
+}
+.hero__title {
+  max-width: 24ch;
+  margin: 24px 0 20px;
+  font-size: var(--fs-hero);
+  line-height: .98;
+  letter-spacing: -.05em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+.hero__period { color: var(--accent); }
+.hero__lede {
+  max-width: var(--measure-lede);
+  font-size: var(--fs-lede);
+  line-height: 1.4;
+  letter-spacing: -.02em;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.hero__lede strong { color: var(--ink); font-weight: 500; }
+.hero__cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 30px 0 clamp(40px, 6vw, 64px); }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 13px 22px;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background .3s var(--ease), border-color .3s var(--ease), color .3s var(--ease), transform .5s var(--ease-soft);
+}
+.btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
+.btn--ghost { background: none; border-color: var(--divider-hi); color: var(--ink-2); }
+.btn--ghost:hover { background: var(--card-hi); border-color: var(--divider-hi); color: var(--ink); }
+.btn--small { gap: 8px; padding: 9px 15px; font-size: var(--fs-small); }
+.btn__arrow { transition: transform .3s var(--ease); }
+.btn:hover .btn__arrow { transform: translateX(4px); }
+.hero__tagline {
+  font-size: clamp(26px, 3.2vw, 40px);
+  line-height: 1.05;
+  letter-spacing: -.04em;
+  font-weight: 500;
+  color: var(--ink-2);
+  text-wrap: balance;
+}
+/* Each half takes the color of its flame, so the line doubles as the key. */
+.hero__break { color: var(--fire-ink); white-space: nowrap; }
+.hero__fix { color: var(--ice-ink); white-space: nowrap; }
+.hero__hint { display: none; margin-top: 12px; font: 400 12px/1 var(--mono); color: var(--ink-3); }
+.js .hero__hint { display: block; }
+@media (hover: none) { .js .hero__hint { font-size: 0; } .js .hero__hint::after { content: "Tap a flame"; font-size: 12px; } }
+
+
+/* =========================================================
+   Stage — portrait and light spill
+   ========================================================= */
+.stage {
+  /* Where the flames sit, as % of the stage: just above each palm in the photo. */
+  --fire-x: 20.5%; --fire-y: 67%;
+  --ice-x: 81%;    --ice-y: 67%;
+  --fire-a: .55; --ice-a: .55;
+  --orb: calc(var(--stage) * .15);
+  grid-area: stage;
+  position: relative;
+  width: var(--stage);
+  aspect-ratio: 1;
+  max-width: 100%;
+  margin: clamp(8px, 2vw, 24px) auto 0;
+}
+.portrait {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  isolation: isolate;
+  -webkit-mask-image: linear-gradient(to bottom, var(--ink) 86%, transparent 100%);
+  mask-image: linear-gradient(to bottom, var(--ink) 86%, transparent 100%);
+}
+.portrait__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.portrait::before,
+.portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  transition: opacity .5s var(--ease);
+  /* Light only lands where the photo is lit (hands, face), never on the flat
+     dark backdrop, where a faint gradient would band into rings. A 7 KB copy
+     of the photo is plenty for a luminance mask. */
+  mask: url(assets/kevin-mask.jpg) center / cover no-repeat luminance;
+}
+.portrait::before { background: radial-gradient(circle at var(--fire-x) var(--fire-y), var(--fire-light) 0%, color-mix(in srgb, var(--fire-light) 72%, transparent) 11%, color-mix(in srgb, var(--fire-light) 44%, transparent) 22%, color-mix(in srgb, var(--fire-light) 22%, transparent) 33%, color-mix(in srgb, var(--fire-light) 9%, transparent) 45%, color-mix(in srgb, var(--fire-light) 3%, transparent) 53%, transparent 62%); opacity: var(--fire-a); }
+.portrait::after  { background: radial-gradient(circle at var(--ice-x) var(--ice-y), var(--ice-light) 0%, color-mix(in srgb, var(--ice-light) 72%, transparent) 11%, color-mix(in srgb, var(--ice-light) 44%, transparent) 22%, color-mix(in srgb, var(--ice-light) 22%, transparent) 33%, color-mix(in srgb, var(--ice-light) 9%, transparent) 45%, color-mix(in srgb, var(--ice-light) 3%, transparent) 53%, transparent 62%); opacity: var(--ice-a); }
+.js .portrait::before { animation: flicker 2.6s ease-in-out infinite; }
+.js .portrait::after  { animation: flicker 3.1s ease-in-out infinite reverse; }
+@keyframes flicker { 0%, 100% { filter: brightness(1); } 40% { filter: brightness(1.18); } 70% { filter: brightness(.9); } }
+.stage:has(.flame--fire:hover, .flame--fire .is-open) { --fire-a: 1; --ice-a: .3; }
+.stage:has(.flame--ice:hover, .flame--ice .is-open) { --ice-a: 1; --fire-a: .3; }
+
+/* =========================================================
+   Orb — the fireball. CSS version is the fallback; script swaps in WebGL fire
+   ========================================================= */
+.flame { display: contents; }
+.flame--fire { --c0: var(--fire-core); --c1: var(--fire-1); --c2: var(--fire-2); --c3: var(--fire-3); --glow: var(--fire-glow); --line: var(--fire-line); --x: var(--fire-x); --y: var(--fire-y); --gl: var(--gl-fire); }
+.flame--ice  { --c0: var(--ice-core);  --c1: var(--ice-1);  --c2: var(--ice-2);  --c3: var(--ice-3);  --glow: var(--ice-glow);  --line: var(--ice-line);  --x: var(--ice-x);  --y: var(--ice-y);  --gl: var(--gl-ice); }
+.orb {
+  position: absolute;
+  left: var(--x); top: var(--y);
+  z-index: 3;
+  width: var(--orb); height: var(--orb);
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.orb__fire { position: absolute; inset: 0; transition: transform .6s var(--ease-pop); }
+.orb__fire::before {
+  content: "";
+  position: absolute;
+  inset: -110%;
+  border-radius: 50%;
+  /* Eased falloff, closest-side so it reaches zero before the box edge: no ring. */
+  background: radial-gradient(circle closest-side, var(--glow) 0%, color-mix(in srgb, var(--glow) 72%, transparent) 18%, color-mix(in srgb, var(--glow) 44%, transparent) 36%, color-mix(in srgb, var(--glow) 22%, transparent) 54%, color-mix(in srgb, var(--glow) 9%, transparent) 72%, color-mix(in srgb, var(--glow) 3%, transparent) 86%, transparent 100%);
+  transition: opacity .5s var(--ease), transform .6s var(--ease-soft);
+  opacity: .75;
+}
+.orb__fire b {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 58%, var(--c0) 0 16%, var(--c1) 34%, var(--c2) 56%, var(--c3) 74%, transparent 76%);
+  filter: blur(1.5px);
+}
+.orb__fire i {
+  position: absolute;
+  left: 22%;
+  bottom: 30%;
+  width: 56%;
+  height: 80%;
+  border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+  background: radial-gradient(ellipse at 50% 80%, var(--c0) 0 10%, var(--c1) 30%, var(--c2) 52%, transparent 72%);
+  filter: blur(5px);
+  mix-blend-mode: screen;
+  transform-origin: 50% 100%;
+  opacity: .85;
+}
+.orb__fire i:nth-child(2) { left: 8%; width: 46%; height: 64%; }
+.orb__fire i:nth-child(3) { left: 46%; width: 46%; height: 70%; }
+.js .orb__fire b { animation: pulse 2.2s ease-in-out infinite; }
+.js .orb__fire i { animation: lick 1.3s ease-in infinite; }
+.js .orb__fire i:nth-child(2) { animation-duration: 1.7s; animation-delay: -.6s; }
+.js .orb__fire i:nth-child(3) { animation-duration: 1.5s; animation-delay: -1.1s; }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 45% { transform: scale(1.05); } 70% { transform: scale(.97); } }
+@keyframes lick {
+  0%   { transform: translateY(10%) scale(1, 1); opacity: .9; }
+  100% { transform: translateY(-46%) scale(.35, 1.25); opacity: 0; }
+}
+.orb:hover .orb__fire,
+.orb.is-open .orb__fire,
+.orb:focus-visible .orb__fire { transform: scale(1.2); }
+.orb:hover .orb__fire::before,
+.orb.is-open .orb__fire::before { opacity: 1; transform: scale(1.25); }
+
+/* WebGL fire: the canvas is black where there is no flame; screen blending
+   turns black transparent so only the light lands on the photo. */
+.orb.has-gl { mix-blend-mode: screen; }
+.orb.has-gl .orb__fire b,
+.orb.has-gl .orb__fire i,
+.orb.has-gl .orb__fire::before { display: none; }
+.orb.has-gl:hover .orb__fire,
+.orb.has-gl.is-open .orb__fire,
+.orb.has-gl:focus-visible .orb__fire { transform: none; }
+.orb__gl {
+  position: absolute;
+  /* 10 ball-radii wide, 12 tall; the ball sits 4 radii above the bottom edge. */
+  left: -200%; top: -350%;
+  width: 500%; height: 600%;
+  pointer-events: none;
+}
+
+/* =========================================================
+   Skills — plain lines fly out of the flame like sparks
+   ========================================================= */
+.skills {
+  position: absolute;
+  left: var(--x); top: var(--y);
+  z-index: 4;
+  width: 0; height: 0;
+  margin: 0; padding: 0;
+  list-style: none;
+}
+/* Each line carries its own landing spot (--dx, --dy, in flame widths) and tilt
+   (--r) inline. They rise above their own flame and stay clear of the face.
+   --i sets the pop order, bottom to top. */
+.skill {
+  position: absolute;
+  left: 0; top: 0;
+  padding: clamp(6px, .55vw, 8px) clamp(11px, .9vw, 13px);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--chip-bg);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  font: 500 clamp(13px, 1.05vw, 15px)/1.1 var(--sans);
+  letter-spacing: -.01em;
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(.2);
+  transition:
+    transform .6s var(--ease-pop) calc(var(--i) * 70ms),
+    opacity .3s var(--ease) calc(var(--i) * 70ms);
+}
+.skill::before {
+  content: "";
+  display: inline-block;
+  width: 6px; height: 6px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: var(--c1);
+  box-shadow: 0 0 8px var(--c2);
+  vertical-align: 1px;
+}
+.orb:hover + .skills .skill,
+.orb:focus-visible + .skills .skill,
+.orb.is-open + .skills .skill,
+.skills:hover .skill {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) translate(calc(var(--dx) * var(--orb)), calc(var(--dy) * var(--orb))) rotate(var(--r)) scale(1);
+  animation: drift 2.8s ease-in-out calc(.6s + var(--i) * 70ms) infinite alternate;
+}
+@keyframes drift { from { translate: 0 0; } to { translate: 0 -5px; } }
+
+/* Narrow screens: there is no room beside the face, so the lines drop into a
+   band just under the flames, over the hands, and never reach the next section. */
+@media (max-width: 720px) {
+  .skills {
+    left: -8px; right: -8px; top: calc(var(--y) + var(--orb) * .6);
+    width: auto; height: auto;
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+  }
+  .skill { position: relative; padding: 6px 11px; font-size: 13.5px; transform: translateY(-14px) scale(.6); }
+  .orb:hover + .skills .skill,
+  .orb:focus-visible + .skills .skill,
+  .orb.is-open + .skills .skill,
+  .skills:hover .skill { transform: rotate(calc(var(--r) * .4)); }
+  .flame--fire .skill { transform-origin: 20% 0; }
+  .flame--ice .skill { transform-origin: 80% 0; }
+}
+@media (max-width: 400px) {
+  .skills { gap: 5px; }
+  .skill { padding: 5px 9px; font-size: 12.5px; }
+  .skill::before { margin-right: 6px; }
+}
+
+/* =========================================================
+   Sections — shared heading and lede
+   ========================================================= */
+.section { padding-top: clamp(80px, 10vw, 140px); }
+.section__title {
+  margin-bottom: 18px;
+  font-size: var(--fs-title);
+  line-height: 1.02;
+  letter-spacing: -.04em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+.section__lede {
+  max-width: var(--measure-lede);
+  font-size: var(--fs-lede);
+  line-height: 1.4;
+  letter-spacing: -.02em;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+.note { max-width: var(--measure); margin-top: 14px; font-size: var(--fs-small); color: var(--ink-3); }
+
+/* =========================================================
+   Steps — a line with dots that fills as you read. Used for the founder's
+   moments, the review, and how we work: each is a real sequence.
+   ========================================================= */
+.steps {
+  position: relative;
+  margin: clamp(20px, 3vw, 36px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.steps::before,
+.steps::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(var(--rail) / 2 - 1px);
+  width: 2px;
+}
+.steps::before { bottom: 0; background: var(--divider); }
+.steps::after { height: var(--progress, 100%); background: linear-gradient(var(--ink-3), var(--ink-4)); }
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  padding-block: clamp(22px, 3vw, 36px);
+}
+.step__node {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  display: grid; place-items: center;
+  width: 32px; height: 32px;
+  border: 2px solid var(--ink-3);
+  border-radius: 50%;
+  background: var(--bg);
+  font: 500 13px/1 var(--mono);
+}
+.step__main { min-width: 0; padding-top: 2px; }
+.step__title {
+  margin-bottom: 10px;
+  font-size: var(--fs-step);
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  font-weight: 500;
+}
+.step__body { max-width: var(--measure); color: var(--ink-2); }
+
+/* The founder's moments: small dots, the last one is "you are here" */
+.steps--moments .step { padding-block: clamp(12px, 1.6vw, 18px); }
+.step__dot {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  width: 13px; height: 13px;
+  margin-top: calc(var(--fs-lede) * .7 - 6.5px);
+  border: 2px solid var(--ink-3);
+  border-radius: 50%;
+  background: var(--bg);
+}
+.step__text {
+  max-width: var(--measure-lede);
+  font-size: var(--fs-lede);
+  line-height: 1.4;
+  letter-spacing: -.02em;
+  color: var(--ink-2);
+}
+.step--here .step__dot { border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft); }
+.step--here strong { display: block; color: var(--accent); font-weight: 500; }
+
+/* =========================================================
+   Self-check — ten boxes, then one result bar under them. A CSS counter
+   shows how many are left unticked; the script adds the "?" before the
+   first tick, shows only the line for your score, and puts the answers
+   into the email. Without the script, all three lines show.
+   ========================================================= */
+.check {
+  counter-reset: open;
+  display: grid;
+  gap: clamp(14px, 2vw, 22px);
+  margin-top: clamp(24px, 3vw, 36px);
+  padding: clamp(14px, 2.6vw, 30px);
+  background: var(--card);
+  border: 1px solid var(--divider);
+  border-radius: var(--r-card);
+}
+.check__list { margin: 0; padding: 0; list-style: none; }
+.check__list li {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider-2);
+}
+.check__list li:last-child { border-bottom: 0; }
+.check__list label { cursor: pointer; }
+/* From tablet width every question stays on one line (the longest needs ~540px) */
+@media (min-width: 720px) { .check__list label { white-space: nowrap; } }
+.check input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  display: grid; place-content: center;
+  width: 20px; height: 20px;
+  margin: 2px 0 0;
+  border: 1px solid var(--divider-hi);
+  border-radius: 6px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: background .15s var(--ease), border-color .15s var(--ease);
+}
+.check input:not(:checked) { counter-increment: open; }
+.check input:checked { background: var(--accent); border-color: var(--accent); }
+.check input:checked::after {
+  content: "";
+  width: 10px; height: 5px;
+  border: 2px solid var(--bg); border-top: 0; border-right: 0;
+  transform: translateY(-1px) rotate(-45deg);
+}
+/* Small screens: the result wrapper dissolves so the count bar can stick to the
+   bottom of the screen while you tick; the line for your score sits under it. */
+.check__out { display: contents; }
+.check__bar {
+  position: sticky;
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  z-index: 2;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 10px;
+  padding: 10px 10px 10px 16px;
+  background: var(--bg-2);
+  border: 1px solid var(--divider-hi);
+  border-radius: var(--r-well);
+}
+/* Small screens: the label sits under the number so count and button share one row. */
+.check__count { display: flex; flex-direction: column; gap: 2px; color: var(--ink-2); }
+.check__label { font-size: 13px; line-height: 1.2; color: var(--ink-3); }
+.check__bar .btn--small { padding: 8px 13px; }
+.check__n {
+  min-width: 1.1ch;
+  font: 500 clamp(32px, 3.6vw, 46px)/1 var(--sans);
+  letter-spacing: -.04em;
+  color: var(--fire-ink);
+  font-variant-numeric: tabular-nums;
+}
+.check__n::before { content: counter(open); }
+.js .check__n::before { content: none; }
+.check__key { display: grid; gap: 8px; margin: 0; padding: 0 4px; list-style: none; font-size: var(--fs-small); color: var(--ink-2); }
+.check__key li { display: flex; align-items: baseline; gap: 12px; text-wrap: balance; }
+.check__key b { flex: none; min-width: 4.2em; font: 500 12px/1.4 var(--mono); color: var(--ink); }
+/* With the script: a nudge before the first tick, then only the line for your score */
+.check__key [data-band="none"] { display: none; }
+.js .check__key li { display: none; }
+.js .check:not([data-band]) .check__key [data-band="none"],
+.check[data-band="0"] .check__key [data-band="0"],
+.check[data-band="1"] .check__key [data-band="1"],
+.check[data-band="2"] .check__key [data-band="2"] { display: flex; color: var(--ink); }
+.check[data-band] .check__key b { color: var(--fire-ink); }
+/* Wide screens: one bar under the questions: count | your line | button, all on
+   one center line. It sticks to the bottom of the screen while you tick. */
+@media (min-width: 1000px) {
+  .check__out {
+    position: sticky;
+    bottom: 12px;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px clamp(20px, 2.6vw, 36px);
+    padding: 14px 14px 14px 24px;
+    background: var(--bg-2);
+    border: 1px solid var(--divider-hi);
+    border-radius: var(--r-well);
+  }
+  .check__bar { display: contents; }
+  .check__count { grid-area: 1 / 1; flex-direction: row; align-items: center; gap: 12px; }
+  .check__label { font-size: var(--fs-small); line-height: 1.3; color: var(--ink-2); }
+  .check__key { grid-area: 1 / 2; padding: 0 0 0 clamp(20px, 2.6vw, 36px); border-left: 1px solid var(--divider); }
+  .check__bar .btn--small { grid-area: 1 / 3; padding: 10px 16px; }
+}
+
+/* =========================================================
+   What I do — what I tried, severities, an example finding, the plan
+   ========================================================= */
+.panel {
+  margin: 24px 0 0;
+  background: var(--card);
+  border: 1px solid var(--divider);
+  border-radius: var(--r-well);
+  overflow: hidden;
+}
+.panel__bar {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px;
+  padding: 10px 16px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--divider-2);
+  font: 400 12px/1.5 var(--mono);
+  color: var(--ink-3);
+}
+.tried { margin: 0; padding: 4px 16px; list-style: none; }
+.tried li {
+  display: grid;
+  grid-template-columns: 1.4em minmax(0, 1fr) minmax(0, 1fr);
+  gap: 2px 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--divider-2);
+  font-size: var(--fs-small);
+}
+.tried li:last-child { border-bottom: 0; }
+.tried__mark { font-weight: 600; color: var(--sev-crit); }
+.tried .is-ok .tried__mark { color: var(--ok); }
+.tried__try { color: var(--ink-2); }
+@media (max-width: 620px) {
+  .tried li { grid-template-columns: 1.4em minmax(0, 1fr); }
+  .tried__got { grid-column: 2; }
+}
+
+.sevs { display: grid; gap: 10px; margin: 24px 0 0; padding: 0; list-style: none; }
+.sevs li {
+  display: grid;
+  grid-template-columns: 7em minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+}
+.sev {
+  justify-self: start;
+  padding: 4px 9px;
+  border: 1px solid;
+  border-radius: var(--r-pill);
+  font: 500 11px/1.2 var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.sev--crit { color: var(--sev-crit); border-color: color-mix(in srgb, var(--sev-crit) 45%, transparent); background: color-mix(in srgb, var(--sev-crit) 9%, transparent); }
+.sev--high { color: var(--sev-high); border-color: color-mix(in srgb, var(--sev-high) 45%, transparent); background: color-mix(in srgb, var(--sev-high) 9%, transparent); }
+.sev--med  { color: var(--sev-med);  border-color: color-mix(in srgb, var(--sev-med) 45%, transparent);  background: color-mix(in srgb, var(--sev-med) 9%, transparent); }
+.sev--low  { color: var(--sev-low);  border-color: var(--divider-hi); }
+
+.finding {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+  padding: clamp(18px, 2.4vw, 28px);
+  background: var(--card);
+  border: 1px solid var(--divider);
+  border-radius: var(--r-card);
+}
+.finding::after {
+  content: ""; position: absolute; inset: 0 0 auto; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--edge), transparent);
+  pointer-events: none;
+}
+.finding__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font: 400 12px/1.4 var(--mono); color: var(--ink-3); }
+.finding__title {
+  max-width: var(--measure-lede);
+  font-size: clamp(19px, 1.8vw, 23px);
+  line-height: 1.25;
+  letter-spacing: -.025em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+.finding__label { margin-bottom: 6px; font: 500 11px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.finding__text, .finding__steps { max-width: var(--measure); font-size: var(--fs-small); color: var(--ink-2); }
+/* Wide screens: "how to see it" and "ways to fix it" side by side */
+.finding__parts { display: grid; gap: 18px clamp(24px, 4vw, 48px); }
+@media (min-width: 860px) { .finding__parts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.finding__steps { display: grid; gap: 4px; margin: 0; padding-left: 1.3em; }
+.finding__dev { padding-top: 14px; border-top: 1px solid var(--divider-2); }
+.finding__dev summary {
+  display: inline-flex; align-items: center; gap: 8px;
+  list-style: none;
+  cursor: pointer;
+  font: 400 12px/1.5 var(--mono);
+  color: var(--ink-3);
+  transition: color .3s var(--ease);
+}
+.finding__dev summary::-webkit-details-marker { display: none; }
+.finding__dev summary::before { content: "▸"; transition: transform .3s var(--ease); }
+.finding__dev summary:hover { color: var(--ink); }
+.finding__dev[open] summary::before { transform: rotate(90deg); }
+.finding__dev p {
+  margin-top: 10px;
+  max-width: var(--measure);
+  padding-left: 16px;
+  border-left: 1px solid var(--divider-hi);
+  font-size: var(--fs-small);
+  color: var(--ink-2);
+}
+
+.plan { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 24px; }
+@media (max-width: 720px) { .plan { grid-template-columns: 1fr; } }
+.plan__col { padding: 16px; background: var(--card); border: 1px solid var(--divider); border-radius: var(--r-well); }
+.plan__col--now { border-color: color-mix(in srgb, var(--sev-crit) 32%, transparent); }
+.plan__head { margin-bottom: 12px; font: 500 11px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.plan__col--now .plan__head { color: var(--sev-crit); }
+.plan ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; font-size: var(--fs-small); }
+.plan li {
+  padding: 9px 11px;
+  background: var(--bg-2);
+  border: 1px solid var(--divider-2);
+  border-radius: var(--r-chip);
+  line-height: 1.35;
+}
+
+/* =========================================================
+   How we work, and what it costs — prices sit on the steps they belong to
+   ========================================================= */
+.price {
+  display: inline-flex; flex-wrap: wrap; align-items: baseline;
+  gap: 6px 14px;
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: var(--card);
+  border: 1px solid var(--divider);
+  border-radius: var(--r-well);
+}
+.price__tag { flex-basis: 100%; margin-bottom: 4px; font: 500 11px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.price__sum { font: 500 clamp(28px, 2.8vw, 38px)/1 var(--sans); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+.price__meta { font: 400 12px/1.5 var(--mono); color: var(--ink-3); }
+.step--start .step__node { border-color: var(--accent); color: var(--accent); }
+.step--start .price { border-color: var(--accent-line); }
+
+.facts {
+  max-width: var(--measure);
+  margin: clamp(12px, 2vw, 24px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--divider);
+}
+.facts li {
+  position: relative;
+  padding: 13px 0 13px 24px;
+  border-bottom: 1px solid var(--divider);
+  color: var(--ink-2);
+}
+.facts li::before {
+  content: "";
+  position: absolute; left: 2px; top: 1.45em;
+  width: 9px; height: 2px;
+  background: var(--ink-3);
+}
+
+/* =========================================================
+   Who's looking at your app — proof in two groups, then discretion
+   ========================================================= */
+.proof { display: grid; gap: clamp(28px, 4vw, 40px) clamp(32px, 4vw, 56px); margin-top: clamp(24px, 3vw, 36px); }
+@media (min-width: 900px) { .proof { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.proof__head {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--divider);
+  font: 500 11px/1.4 var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.proof__list { margin: 0; padding: 0; list-style: none; }
+.proof__list li { padding: 14px 0; border-bottom: 1px solid var(--divider); }
+/* Ready for a real quote: uncomment the blockquote in index.html */
+.quote { margin: 28px 0 0; padding: clamp(18px, 2.4vw, 26px); background: var(--card); border: 1px solid var(--divider); border-radius: var(--r-card); }
+.quote p { max-width: 48ch; font-size: var(--fs-lede); line-height: 1.35; letter-spacing: -.02em; }
+.quote footer { margin-top: 10px; font: 400 12px/1.5 var(--mono); color: var(--ink-3); }
+.why__note { max-width: var(--measure); margin-top: 24px; color: var(--ink-2); }
+
+/* =========================================================
+   Questions — native <details>, no script
+   ========================================================= */
+.faq { margin-top: clamp(24px, 3vw, 36px); border-top: 1px solid var(--divider); }
+.faq details { border-bottom: 1px solid var(--divider); }
+.faq summary {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  padding: 18px 0;
+  list-style: none;
+  cursor: pointer;
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; flex: none; font: 400 20px/1 var(--mono); color: var(--ink-3); transition: transform .3s var(--ease), color .3s var(--ease); }
+.faq summary:hover::after { color: var(--ink); }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { max-width: var(--measure); padding-bottom: 20px; color: var(--ink-2); }
+
+/* =========================================================
+   Contact
+   ========================================================= */
+.contact { padding-block: clamp(96px, 11vw, 160px) clamp(72px, 9vw, 120px); }
+.contact__title {
+  margin-bottom: 20px;
+  font-size: var(--fs-title);
+  line-height: 1.02;
+  letter-spacing: -.04em;
+  font-weight: 500;
+  text-wrap: balance;
+}
+.contact__body {
+  max-width: var(--measure-lede);
+  margin-bottom: 30px;
+  font-size: var(--fs-lede);
+  line-height: 1.4;
+  letter-spacing: -.02em;
+  color: var(--ink-2);
+}
+.contact__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+.mail {
+  display: inline-flex; align-items: center; gap: 14px;
+  max-width: 100%;
+  padding: clamp(14px, 1.6vw, 18px) clamp(22px, 2.6vw, 30px);
+  border-radius: var(--r-pill);
+  background: var(--ink);
+  color: var(--bg);
+  font-size: clamp(17px, 1.6vw, 21px);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  overflow-wrap: anywhere;
+  transition: background .3s var(--ease), transform .5s var(--ease-soft);
+}
+.mail:hover { background: var(--accent); transform: translateY(-2px); }
+.mail__arrow { transition: transform .3s var(--ease); }
+.mail:hover .mail__arrow { transform: translateX(4px); }
+.contact__copy {
+  padding: 11px 18px;
+  border: 1px solid var(--divider-hi);
+  border-radius: var(--r-pill);
+  background: none;
+  color: var(--ink-2);
+  font: 500 var(--fs-small)/1.2 var(--sans);
+  cursor: pointer;
+  transition: color .3s var(--ease), background .3s var(--ease);
+}
+.contact__copy:hover { color: var(--ink); background: var(--card-hi); }
+.contact__alt {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-decoration-color: var(--ink-4);
+  text-underline-offset: 3px;
+  transition: color .3s var(--ease), text-decoration-color .3s var(--ease);
+}
+.contact__alt:hover { color: var(--ink); text-decoration-color: var(--ink-2); }
+
+/* =========================================================
+   Footer
+   ========================================================= */
+.foot__inner {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px;
+  padding-block: 24px;
+  border-top: 1px solid var(--divider-2);
+  font: 400 12px/1.5 var(--mono);
+  color: var(--ink-3);
+}
+
+/* =========================================================
+   Reveal + reduced motion
+   ========================================================= */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .75s var(--ease), transform .75s var(--ease);
+}
+.js [data-reveal].is-revealed { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .btn:hover, .mail:hover, .btn:hover .btn__arrow, .mail:hover .mail__arrow { transform: none; }
+  html { scroll-behavior: auto; }
+}
