@@ -1019,21 +1019,13 @@ html.is-burning, html.is-burning * { cursor: none !important; }
   font: 400 12px/1.5 var(--mono);
   color: var(--ink-3);
 }
-.foot__lang { display: flex; gap: 14px; }
-.foot__lang a, .foot__link { color: var(--ink-3); transition: color .3s var(--ease); }
-.foot__lang a:hover, .foot__lang [aria-current], .foot__link:hover, .foot__link[aria-current] { color: var(--ink); }
-/* Legal notice: its own line under the rest. Each part stays together, with
-   its dot, and the line breaks between parts. Phones: one part per line. */
-.foot__legal { flex-basis: 100%; font-style: normal; color: var(--ink-3); }
-.foot__legal span { display: inline-block; }
-.foot__legal span:not(:last-child)::after { content: " ·"; content: " ·" / ""; }
-@media (max-width: 600px) {
-  .foot__legal span { display: block; }
-  .foot__legal span::after { display: none; }
-}
+/* Language links and the legal links. The current page is lit. */
+.foot__lang, .foot__nav { display: flex; gap: 14px; }
+.foot__lang a, .foot__nav a { color: var(--ink-3); transition: color .3s var(--ease); }
+.foot__lang a:hover, .foot__nav a:hover, .foot__lang [aria-current], .foot__nav [aria-current] { color: var(--ink); }
 
 /* =========================================================
-   Privacy notice — a plain reading page, one per language
+   Legal notice and privacy notice — plain reading pages, one per language
    ========================================================= */
 .legal { padding-block: clamp(48px, 7vw, 96px) clamp(72px, 9vw, 120px); }
 .legal__title {
@@ -1059,6 +1051,15 @@ html.is-burning, html.is-burning * { cursor: none !important; }
 .legal__body address { font-style: normal; }
 .legal__body ul { margin-bottom: 0; padding-left: 1.2em; }
 .legal__body li + li { margin-top: 6px; }
+/* Label and value side by side; stacked on phones. */
+/* One label width for every list, so the values line up across sections. */
+.legal__facts { display: grid; grid-template-columns: 11rem 1fr; align-items: baseline; gap: 10px 28px; margin: 0; }
+.legal__facts dt { font: 400 12px/1.5 var(--mono); color: var(--ink-3); }
+.legal__facts dd { margin: 0; color: var(--ink); }
+@media (max-width: 600px) {
+  .legal__facts { grid-template-columns: 1fr; gap: 2px; }
+  .legal__facts dd + dt { margin-top: 14px; }
+}
 .legal__body strong { color: var(--ink); font-weight: 500; }
 .legal__body a {
   color: var(--ink);

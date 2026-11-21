@@ -48,4 +48,28 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://kevinley.github.io/fr/confidentialite/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://kevinley.github.io/privacy/"/>
   </url>
+  <url>
+    <loc>https://kevinley.github.io/legal/</loc>
+    <lastmod>2026-11-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kevinley.github.io/legal/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/impressum/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kevinley.github.io/fr/mentions-legales/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kevinley.github.io/legal/"/>
+  </url>
+  <url>
+    <loc>https://kevinley.github.io/de/impressum/</loc>
+    <lastmod>2026-11-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kevinley.github.io/legal/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/impressum/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kevinley.github.io/fr/mentions-legales/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kevinley.github.io/legal/"/>
+  </url>
+  <url>
+    <loc>https://kevinley.github.io/fr/mentions-legales/</loc>
+    <lastmod>2026-11-21</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://kevinley.github.io/legal/"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/impressum/"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://kevinley.github.io/fr/mentions-legales/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://kevinley.github.io/legal/"/>
+  </url>
 </urlset>
