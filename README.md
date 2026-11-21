@@ -51,17 +51,18 @@ With a mouse, hovering a flame turns the cursor into a flame of that color. The 
 
 - `assets/kevin-640.avif` and `assets/kevin-1024.avif`: the hero photo, cut out with a transparent background, so the wall behind the page shows around it.
 - `assets/kevin-640.jpg` and `assets/kevin-1024.jpg`: the fallback for browsers without AVIF, on the page color `#0e0e0d`.
-- `assets/kevin-mask.jpg`: a 256 px copy on pure black, used as the mask for the flames' light on the photo. It must be black wherever the photo is transparent, or the light shows a faint square.
+- `assets/kevin-mask.avif`: the mask for the flames' light on the photo, 256 px. It is white, and its transparency follows how bright the photo is: fully transparent beside the photo and in the darkest shadows, so the light only lands on the hands and face. It is a plain transparency mask because Safari ignores brightness ("luminance") masks, and the light then fills the photo's whole square.
 - `og.jpg`: the 1200×630 preview image for links shared on Slack, LinkedIn and X.
 
-To redo them on macOS from a new 1024 px photo, start with three PNGs: the cut-out with transparency (`cut.png`; Finder's "Remove Background" quick action does this), the cut-out on `#0e0e0d` (`on-bg.png`) and the cut-out on black (`on-black.png`).
+To redo them on macOS from a new 1024 px photo, start with two PNGs: the cut-out with transparency (`cut.png`; Finder's "Remove Background" quick action does this) and the cut-out on `#0e0e0d` (`on-bg.png`).
 
 ```sh
 sips -s format avif -s formatOptions 50 cut.png --out assets/kevin-1024.avif
 sips -Z 640 cut.png --out cut-640.png && sips -s format avif -s formatOptions 50 cut-640.png --out assets/kevin-640.avif
 sips -s format jpeg -s formatOptions 58 on-bg.png --out assets/kevin-1024.jpg
 sips -Z 640 -s format jpeg -s formatOptions 60 on-bg.png --out assets/kevin-640.jpg
-sips -Z 256 -s format jpeg -s formatOptions 55 on-black.png --out assets/kevin-mask.jpg
+swift tools/light-mask.swift assets/kevin-1024.avif mask.png
+sips -Z 256 mask.png --out mask-256.png && sips -s format avif mask-256.png --out assets/kevin-mask.avif
 ```
 
 Then move the flames onto the new palms with `--fire-x`, `--fire-y`, `--ice-x` and `--ice-y` at the top of the Stage section in `styles.css`.

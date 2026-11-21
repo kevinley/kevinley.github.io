@@ -288,10 +288,12 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   mix-blend-mode: overlay;
   pointer-events: none;
   transition: opacity .5s var(--ease);
-  /* Light only lands where the photo is lit (hands, face), never on the flat
-     dark backdrop, where a faint gradient would band into rings. A 7 KB copy
-     of the photo is plenty for a luminance mask. */
-  mask: url(assets/kevin-mask.jpg) center / cover no-repeat luminance;
+  /* Light only lands where the photo is lit (hands, face), never beside it.
+     The 7 KB mask is white, with alpha = how bright the photo is there
+     (tools/light-mask.swift). A plain alpha mask with a -webkit- copy: Safari
+     drops a "luminance" mask, and the light then fills the photo's square. */
+  -webkit-mask: url(assets/kevin-mask.avif) center / cover no-repeat;
+  mask: url(assets/kevin-mask.avif) center / cover no-repeat;
 }
 .portrait::before { background: radial-gradient(circle at var(--fire-x) var(--fire-y), var(--fire-light) 0%, color-mix(in srgb, var(--fire-light) 72%, transparent) 11%, color-mix(in srgb, var(--fire-light) 44%, transparent) 22%, color-mix(in srgb, var(--fire-light) 22%, transparent) 33%, color-mix(in srgb, var(--fire-light) 9%, transparent) 45%, color-mix(in srgb, var(--fire-light) 3%, transparent) 53%, transparent 62%); opacity: var(--fire-a); }
 .portrait::after  { background: radial-gradient(circle at var(--ice-x) var(--ice-y), var(--ice-light) 0%, color-mix(in srgb, var(--ice-light) 72%, transparent) 11%, color-mix(in srgb, var(--ice-light) 44%, transparent) 22%, color-mix(in srgb, var(--ice-light) 22%, transparent) 33%, color-mix(in srgb, var(--ice-light) 9%, transparent) 45%, color-mix(in srgb, var(--ice-light) 3%, transparent) 53%, transparent 62%); opacity: var(--ice-a); }
