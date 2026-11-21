@@ -32,14 +32,14 @@ The site is live about a minute later. `.nojekyll` tells Pages to serve the file
 
 ## Before going live
 
-Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
+Still to do. Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 
-- **Email:** `hello@kevinley.dev` is a placeholder. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD. It is also the contact in `.well-known/security.txt`.
+- **Email:** `swiftysenpai@icloud.com`. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD, and it is the contact in `.well-known/security.txt`. To change it, replace it everywhere at once.
 - **Email draft:** all three mail buttons open the same draft. Its text lives in `<template id="mail-draft">` on each page, so you can edit it there. The script puts the self-check count where `{count}` is.
 - **Booking link:** commented out in the contact section until it exists.
 - **Quote:** commented out under "Who's looking at your app" until there is a real one.
 - **Legal notice:** business name, address and VAT number in the footer.
-- **Profiles:** the `Person` in the JSON-LD has no `sameAs` yet. Add the profiles you want search engines and AI tools to tie to you (LinkedIn, GitHub…).
+- **Profiles:** the `Person` in the JSON-LD links to LinkedIn and GitHub (`sameAs`), so search engines and AI tools tie them to you. Add more profiles there.
 - **security.txt:** renew `Expires` in `.well-known/security.txt` before 21 Nov 2027.
 
 ## Moving to your own domain

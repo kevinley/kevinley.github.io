@@ -26,6 +26,7 @@ The site is one page, in English, German and French. The same content is on all 
 
 ## Who he is
 
+- Profiles: [LinkedIn](https://www.linkedin.com/in/kevinley/), [GitHub](https://github.com/kevinley)
 - [Who's looking at your app](https://kevinley.github.io/#why): building for the web since 2008, with deep experience across many SaaS apps and mobile apps.
 - He wrote the code review rules his team follows, set up its first automated tests that use the app the way a customer does, and set up the AI coding tools for the whole team.
 - He leads a team of three to five developers at a SaaS company, and grew a team from 2 to 15 developers in under two years.
@@ -37,4 +38,4 @@ The site is one page, in English, German and French. The same content is on all 
 
 ## Contact
 
-- [Contact](https://kevinley.github.io/#contact): by email, with a sentence about what was built and what is needed, the link to the app, the count from the ten questions on the page, and a few times for a first call.
+- [Contact](https://kevinley.github.io/#contact): by email at swiftysenpai@icloud.com, with a sentence about what was built and what is needed, the link to the app, the count from the ten questions on the page, and a few times for a first call.
