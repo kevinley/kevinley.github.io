@@ -1,7 +1,10 @@
 /* Progressive enhancement only: the page is complete without this file.
    Reveal, step lines, self-check result + email, copy address, flame buttons.
-   The WebGL fire and the burning cursor load later, from fire.js. */
+   The WebGL fire and the burning cursor load later, from fire.js.
+   Every word it writes comes from data-* attributes in the page, so the
+   English, German and French pages share this one file. */
 (() => {
+  const me = document.currentScript; // to find fire.js next to it, from /de/ and /fr/ too
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -45,10 +48,11 @@
   const tpl = $("#mail-draft");
   const setMail = (open) => {
     if (!tpl) return;
-    const n = open && `${open.length} of 10 left unticked`;
-    const count = open ? n + "." + (open.length ? "\nThe ones I couldn't tick:\n" + open.map((t) => "- " + t).join("\n") : "") : tpl.dataset.nocount;
+    const d = tpl.dataset;
+    const n = open && d.count.replace("{n}", open.length);
+    const count = open ? n + "." + (open.length ? "\n" + d.list + "\n" + open.map((t) => "- " + t).join("\n") : "") : d.nocount;
     const body = tpl.content.textContent.trim().replace("{count}", () => count).replace(/\r?\n/g, "\r\n");
-    const q = `?subject=${encodeURIComponent(open ? `App review (${n})` : "App review")}&body=${encodeURIComponent(body)}`;
+    const q = `?subject=${encodeURIComponent(open ? `${d.subject} (${n})` : d.subject)}&body=${encodeURIComponent(body)}`;
     mails.forEach((a) => { a.href = a.href.split("?")[0] + q; });
   };
   setMail();
@@ -59,10 +63,11 @@
     const boxes = $$("input", check);
     const n = $(".check__n", check);
     const label = $(".check__label", check);
+    const one = new Intl.PluralRules(document.documentElement.lang); // French counts 0 as singular
     const tally = (first) => {
       const open = boxes.filter((b) => !b.checked);
       n.textContent = open.length;
-      label.textContent = open.length === 1 ? "reason to improve" : "reasons to improve";
+      label.textContent = label.dataset[one.select(open.length) === "one" ? "one" : "many"];
       if (first) return;
       check.dataset.band = open.length < 3 ? 0 : open.length < 6 ? 1 : 2;
       setMail(open.map((b) => b.labels[0].textContent));
@@ -82,7 +87,7 @@
     copy.addEventListener("click", () => {
       const address = mail.href.slice(7).split("?")[0];
       navigator.clipboard.writeText(address).then(() => {
-        copy.textContent = "Copied";
+        copy.textContent = copy.dataset.done;
         setTimeout(() => { copy.textContent = label; }, 2000);
       }, () => { copy.textContent = address; }); // blocked: show it to select by hand
     });
@@ -114,7 +119,7 @@
      page has loaded and the browser is idle. Without it the CSS fireballs stay. ---- */
   if (orbs.length) {
     const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-    const fire = () => document.head.append(Object.assign(document.createElement("script"), { src: "fire.js" }));
+    const fire = () => document.head.append(Object.assign(document.createElement("script"), { src: new URL("fire.js", me.src).href }));
     const later = () => idle(fire, { timeout: 1500 });
     if (document.readyState === "complete") later(); else addEventListener("load", later, { once: true });
   }

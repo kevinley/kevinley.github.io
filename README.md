@@ -1,6 +1,6 @@
 # kevinley.github.io
 
-App reviews for founders who built their app with AI. One static page: plain HTML, CSS and JS, no build step, no dependencies.
+App reviews for founders who built their app with AI. One static page in three languages: plain HTML, CSS and JS, no build step, no dependencies.
 
 ## Deploy
 
@@ -12,12 +12,28 @@ git add -A && git commit -m "Update site" && git push
 
 The site is live about a minute later. `.nojekyll` tells Pages to serve the files as they are, without running Jekyll.
 
+## Languages
+
+| Page | Address | File |
+|---|---|---|
+| English | https://kevinley.github.io/ | `index.html` |
+| German | https://kevinley.github.io/de/ | `de/index.html` |
+| French | https://kevinley.github.io/fr/ | `fr/index.html` |
+
+- **Tone:** the German page says "du", the French page says "vous".
+- **One file per language:** each page is a full translation with the same markup. All three share `styles.css`, `script.js`, `fire.js`, the fonts and the photos.
+- **When you change the text, change it on all three pages.** Each section has the same banner comment in every file, so you can find the matching spot.
+- **The script's words** (the self-check label, the email subject and count, "Copied", "Tap a flame") live in `data-*` attributes in each page, not in `script.js`. Look for `data-one`, `data-many`, `data-subject`, `data-count`, `data-list`, `data-done` and `data-touch`.
+- **Language switch:** the EN · DE · FR links sit at the right of the top bar. Each page also tells search engines about the other two (`hreflang` in the head and in `sitemap.xml`). There is no automatic redirect by browser language.
+- **404:** `404.html` shows its message in German or French when the missing address starts with `/de/` or `/fr/`.
+- **German and French typography:** prices are written `3.600 €` (German) and `3 600 €` (French). The French page puts a narrow non-breaking space before `?`, `!` and `;` (`&#8239;`) and a non-breaking space before `:` (`&nbsp;`). Keep these when you edit.
+
 ## Before going live
 
-Search for `TODO` in `index.html`:
+Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 
-- **Email:** `hello@kevinley.dev` is a placeholder. It appears in the hero button, the self-check button, the contact button and the JSON-LD.
-- **Email draft:** all three mail buttons open the same draft. Its text lives in `<template id="mail-draft">` in `index.html`, so you can edit it there. The script puts the self-check count where `{count}` is.
+- **Email:** `hello@kevinley.dev` is a placeholder. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD.
+- **Email draft:** all three mail buttons open the same draft. Its text lives in `<template id="mail-draft">` on each page, so you can edit it there. The script puts the self-check count where `{count}` is.
 - **Booking link:** commented out in the contact section until it exists.
 - **Quote:** commented out under "Who's looking at your app" until there is a real one.
 - **Legal notice:** business name, address and VAT number in the footer.
@@ -26,15 +42,15 @@ Search for `TODO` in `index.html`:
 
 1. Add a `CNAME` file containing the domain, for example `kevinley.dev`.
 2. Point the domain's DNS at GitHub Pages, then tick "Enforce HTTPS" in the repo settings.
-3. Replace `https://kevinley.github.io/` with the new address in `index.html` (canonical, Open Graph, JSON-LD), `robots.txt` and `sitemap.xml`.
+3. Replace `https://kevinley.github.io/` with the new address in `index.html`, `de/index.html` and `fr/index.html` (canonical, hreflang, Open Graph, JSON-LD), `robots.txt` and `sitemap.xml`.
 
 ## Speed
 
 | | Budget (gzip) | Now |
 |---|---|---|
-| HTML | 15 KB | 7.7 KB |
-| CSS | 14 KB | 9.7 KB |
-| JS the page needs | 4 KB | 2.0 KB (`script.js`) |
+| HTML | 15 KB | 8.0 KB (English), 8.9 KB (German), 8.8 KB (French) |
+| CSS | 14 KB | 10.2 KB |
+| JS the page needs | 4 KB | 2.2 KB (`script.js`) |
 | JS for the effects | – | 4.1 KB (`fire.js`, fetched after the page has loaded) |
 | Font files | 2 | 2 (Inter Tight latin, regular + italic, 69 KB) |
 
@@ -52,7 +68,7 @@ With a mouse, hovering a flame turns the cursor into a flame of that color. The 
 - `assets/kevin-640.avif` and `assets/kevin-1024.avif`: the hero photo, cut out with a transparent background, so the wall behind the page shows around it.
 - `assets/kevin-640.jpg` and `assets/kevin-1024.jpg`: the fallback for browsers without AVIF, on the page color `#0e0e0d`.
 - `assets/kevin-mask.avif`: the mask for the flames' light on the photo, 256 px. It is white, and its transparency follows how bright the photo is: fully transparent beside the photo and in the darkest shadows, so the light only lands on the hands and face. It is a plain transparency mask because Safari ignores brightness ("luminance") masks, and the light then fills the photo's whole square.
-- `og.jpg`: the 1200×630 preview image for links shared on Slack, LinkedIn and X.
+- `og.jpg`, `de/og.jpg`, `fr/og.jpg`: the 1200×630 preview image for links shared on Slack, LinkedIn and X, one per language.
 
 To redo them on macOS from a new 1024 px photo, start with two PNGs: the cut-out with transparency (`cut.png`; Finder's "Remove Background" quick action does this) and the cut-out on `#0e0e0d` (`on-bg.png`).
 

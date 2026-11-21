@@ -4,8 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>App reviews for founders who built with AI | Kevin Ley</title>
-<meta name="description" content="Built your app with AI? Kevin Ley, a senior full-stack engineer, takes a deep look at your code and your product, tries to break it, and gives you a plan to make it more robust. €120 per hour, excluding VAT.">
+<meta name="description" content="Built your app with AI? Kevin Ley, a senior full-stack engineer, takes a deep look at your code and your product, tries to break your app, and gives you a plan to make it more robust. €120 per hour, excluding VAT.">
 <link rel="canonical" href="https://kevinley.github.io/">
+<link rel="alternate" hreflang="en" href="https://kevinley.github.io/">
+<link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/">
+<link rel="alternate" hreflang="fr" href="https://kevinley.github.io/fr/">
+<link rel="alternate" hreflang="x-default" href="https://kevinley.github.io/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#0e0e0d">
 <meta name="color-scheme" content="dark">
@@ -15,7 +19,9 @@
 <meta property="og:url" content="https://kevinley.github.io/">
 <meta property="og:site_name" content="Kevin Ley">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="Let me try to break it. App reviews for founders who built with AI">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:locale:alternate" content="fr_FR">
+<meta property="og:title" content="Let me try to break your app. App reviews for founders who built with AI">
 <meta property="og:description" content="A deep look at your code and your product, every problem sorted by severity, and a plan to make your app more robust.">
 <meta property="og:image" content="https://kevinley.github.io/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -23,7 +29,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Kevin Ley holding two flames, one to break your app and one to fix it">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Let me try to break it. App reviews for founders who built with AI">
+<meta name="twitter:title" content="Let me try to break your app. App reviews for founders who built with AI">
 <meta name="twitter:description" content="A deep look at your code and your product, every problem sorted by severity, and a plan to make your app more robust.">
 <meta name="twitter:image" content="https://kevinley.github.io/og.jpg">
 <meta name="twitter:image:alt" content="Kevin Ley holding two flames, one to break your app and one to fix it">
@@ -51,6 +57,7 @@
       "name": "App reviews for founders who built with AI",
       "serviceType": "Code and product review",
       "url": "https://kevinley.github.io/",
+      "inLanguage": "en",
       "provider": { "@id": "https://kevinley.github.io/#person" },
       "description": "Kevin Ley reviews apps that founders built with AI tools such as Lovable, Bolt, Cursor or Claude. He takes a deep look at the code and the product, tries to break the app, sorts every finding by severity, and delivers a plan in order of priority. Each finding shows the problem, the steps to reproduce it and ways to fix it. He can also fix the findings with the founder or for them. It is not a certified security test, but security findings are included.",
       "offers": {
@@ -89,6 +96,11 @@
       <a class="bar__link" href="#prices">Prices</a>
       <a class="bar__link" href="#contact">Contact</a>
     </nav>
+    <nav class="bar__lang" aria-label="Language">
+      <a href="./" hreflang="en" lang="en" aria-current="page" aria-label="English">EN</a>
+      <a href="de/" hreflang="de" lang="de" aria-label="Deutsch">DE</a>
+      <a href="fr/" hreflang="fr" lang="fr" aria-label="Français">FR</a>
+    </nav>
   </div>
 </header>
 
@@ -98,7 +110,7 @@
   <div class="wrap hero__grid">
     <div class="hero__copy">
       <p class="hero__eyebrow">For founders who built their app with AI</p>
-      <h1 class="hero__title" id="hero-title">Let me try to <em>break it</em><span class="hero__period">.</span></h1>
+      <h1 class="hero__title" id="hero-title">Let me try to <em>break your app</em><span class="hero__period">.</span></h1>
       <p class="hero__lede"><strong>Before your users do.</strong> I'm Kevin Ley, a senior full-stack engineer. I take a deep look at your code and your product, and give you a plan to make it more robust.</p>
       <p class="hero__cta">
         <a class="btn" href="mailto:hello@kevinley.dev?subject=App%20review" data-mail>Send me your app<span class="btn__arrow" aria-hidden="true">→</span></a>
@@ -108,7 +120,7 @@
 
     <div class="hero__caption">
       <p class="hero__tagline">One hand <em class="hero__break">breaks it</em>. The other <em class="hero__fix">fixes it</em>.</p>
-      <p class="hero__hint" aria-hidden="true">Hover a flame</p>
+      <p class="hero__hint" aria-hidden="true" data-touch="Tap a flame">Hover a flame</p>
     </div>
 
     <div class="stage" data-stage>
@@ -185,7 +197,7 @@
       </ul>
       <div class="check__out">
         <div class="check__bar">
-          <p class="check__count" role="status"><span class="check__n"></span> <span class="check__label">reasons to improve</span></p>
+          <p class="check__count" role="status"><span class="check__n"></span> <span class="check__label" data-one="reason to improve" data-many="reasons to improve">reasons to improve</span></p>
           <a class="btn btn--small" href="mailto:hello@kevinley.dev?subject=App%20review" data-mail>Let's talk<span class="btn__arrow" aria-hidden="true">→</span></a>
         </div>
         <ul class="check__key" aria-live="polite">
@@ -428,8 +440,11 @@
     <!-- TODO: hello@kevinley.dev is a placeholder. Replace it here, in the hero button, in the self-check button and in the JSON-LD above. -->
     <!-- The email draft every mail button opens. The script puts the self-check
          count where {count} is; data-nocount is used before anyone has ticked.
+         The script's other words live in data-* attributes too (subject, count,
+         list here; data-one/many on the self-check label; data-done on the copy
+         button; data-touch on the flame hint), so each language page sets its own.
          Square brackets are prompts for the sender, not finished text. -->
-    <template id="mail-draft" data-nocount="[Your count, if you did the ten questions on the page.]">Hi Kevin,
+    <template id="mail-draft" data-subject="App review" data-count="{n} of 10 left unticked" data-list="The ones I couldn't tick:" data-nocount="[Your count, if you did the ten questions on the page.]">Hi Kevin,
 
 What I built and what I need:
 [One sentence. For example: "A booking tool for yoga studios. Customers pay in the app, and I want to know it's safe before we launch."]
@@ -446,7 +461,7 @@ Times that work for a first call:
 [Your name]</template>
     <p class="contact__actions" data-reveal>
       <a class="mail" href="mailto:hello@kevinley.dev?subject=App%20review" data-mail>hello@kevinley.dev<span class="mail__arrow" aria-hidden="true">→</span></a>
-      <button class="contact__copy" type="button" data-copy hidden>Copy address</button>
+      <button class="contact__copy" type="button" data-copy data-done="Copied" hidden>Copy address</button>
       <!-- TODO: add the booking link once it exists:
       <a class="contact__alt" href="https://cal.com/your-name" rel="noopener" target="_blank">Or book a first call</a>
       -->

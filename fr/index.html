@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Audit de code pour les apps créées avec l’IA | Kevin Ley</title>
+<meta name="description" content="Vous avez créé votre app avec l’IA&#8239;? Kevin Ley, développeur full-stack senior, examine en profondeur votre code et votre produit, essaie de casser votre app et vous donne un plan pour la rendre plus robuste. 120&nbsp;€ de l’heure, hors TVA.">
+<link rel="canonical" href="https://kevinley.github.io/fr/">
+<link rel="alternate" hreflang="en" href="https://kevinley.github.io/">
+<link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/">
+<link rel="alternate" hreflang="fr" href="https://kevinley.github.io/fr/">
+<link rel="alternate" hreflang="x-default" href="https://kevinley.github.io/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#0e0e0d">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230e0e0d'/%3E%3Ccircle cx='10.5' cy='16' r='5.5' fill='%23ff7a3d'/%3E%3Ccircle cx='21.5' cy='16' r='5.5' fill='%234da3ff'/%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kevinley.github.io/fr/">
+<meta property="og:site_name" content="Kevin Ley">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="de_DE">
+<meta property="og:title" content="Laissez-moi casser votre app. Audit pour les apps créées avec l’IA">
+<meta property="og:description" content="Un examen approfondi de votre code et de votre produit, chaque problème classé par gravité, et un plan pour rendre votre app plus robuste.">
+<meta property="og:image" content="https://kevinley.github.io/fr/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kevin Ley tenant deux flammes&nbsp;: l’une pour casser votre app, l’autre pour la réparer">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Laissez-moi casser votre app. Audit pour les apps créées avec l’IA">
+<meta name="twitter:description" content="Un examen approfondi de votre code et de votre produit, chaque problème classé par gravité, et un plan pour rendre votre app plus robuste.">
+<meta name="twitter:image" content="https://kevinley.github.io/fr/og.jpg">
+<meta name="twitter:image:alt" content="Kevin Ley tenant deux flammes&nbsp;: l’une pour casser votre app, l’autre pour la réparer">
+
+<link rel="preload" href="../fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/inter-tight-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://kevinley.github.io/#person",
+      "name": "Kevin Ley",
+      "url": "https://kevinley.github.io/fr/",
+      "jobTitle": "Développeur full-stack senior",
+      "address": { "@type": "PostalAddress", "addressCountry": "LU" },
+      "email": "mailto:hello@kevinley.dev"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://kevinley.github.io/fr/#service",
+      "name": "Audit de code pour les apps créées avec l’IA",
+      "serviceType": "Audit de code et de produit",
+      "url": "https://kevinley.github.io/fr/",
+      "inLanguage": "fr",
+      "provider": { "@id": "https://kevinley.github.io/#person" },
+      "description": "Kevin Ley audite les apps que des fondateurs ont créées avec des outils d’IA comme Lovable, Bolt, Cursor ou Claude. Il examine en profondeur le code et le produit, essaie de casser l’app, classe chaque constat par gravité et livre un plan par ordre de priorité. Chaque constat décrit le problème, les étapes pour le reproduire et des pistes pour le corriger. Il peut aussi corriger les problèmes avec le fondateur ou pour lui. Ce n’est pas un test de sécurité certifié, mais les constats de sécurité sont inclus.",
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": { "@type": "UnitPriceSpecification", "price": 120, "priceCurrency": "EUR", "unitCode": "HUR", "valueAddedTaxIncluded": false }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://kevinley.github.io/fr/#faq",
+      "inLanguage": "fr",
+      "mainEntity": [
+        { "@type": "Question", "name": "Allez-vous me dire de réécrire mon app ?", "acceptedAnswer": { "@type": "Answer", "text": "Ça dépend. Si les constats sont vraiment graves, quasi impossibles à démêler et trop risqués pour la production, alors oui. Dans ce cas, Kevin Ley planifie la reconstruction avec vous : comment configurer vos outils d’IA et votre façon de travailler avec eux, pour que la nouvelle version soit robuste dès le départ." } },
+        { "@type": "Question", "name": "Je n’ai pas de profil technique. Pouvons-nous quand même travailler ensemble ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui. Chaque constat explique avec des mots simples ce qui ne va pas et pourquoi c’est important, avec des étapes à suivre pour le constater vous-même. Les détails techniques sont là pour la personne qui fera la correction." } },
+        { "@type": "Question", "name": "Avec quelles technologies travaillez-vous ?", "acceptedAnswer": { "@type": "Answer", "text": "N’importe quelle stack, tant qu’elle repose sur JavaScript ou TypeScript." } },
+        { "@type": "Question", "name": "Est-ce un audit de sécurité ?", "acceptedAnswer": { "@type": "Answer", "text": "Non, ce n’est pas un test de sécurité certifié. Mais les problèmes de sécurité repérés pendant l’audit figurent dans le rapport." } },
+        { "@type": "Question", "name": "Qu’advient-il de mon code ?", "acceptedAnswer": { "@type": "Answer", "text": "Kevin Ley signe un accord de confidentialité (NDA) si vous le souhaitez. Une fois le travail terminé, tout ce qui vous appartient vous est remis." } },
+        { "@type": "Question", "name": "Combien de temps ça prend ?", "acceptedAnswer": { "@type": "Answer", "text": "Un audit express prend quelques jours. Un audit approfondi, de quelques jours à quelques semaines. Les corrections et la collaboration peuvent durer des semaines, voire des mois." } },
+        { "@type": "Question", "name": "Pouvez-vous aussi corriger les problèmes ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui, avec vous ou pour vous, au même tarif de 120 euros de l’heure, hors TVA." } }
+      ]
+    }
+  ]
+}
+</script>
+<script>document.documentElement.classList.add("js")</script>
+<script src="../script.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#familiar">Aller au contenu</a>
+
+<!-- ======================= Bar ======================= -->
+<header class="bar">
+  <div class="wrap bar__inner">
+    <a class="bar__brand" href="#top">Kevin Ley</a>
+    <nav class="bar__nav" aria-label="Sections">
+      <a class="bar__link bar__link--wide" href="#how">Comment ça marche</a>
+      <a class="bar__link" href="#prices">Tarifs</a>
+      <a class="bar__link" href="#contact">Contact</a>
+    </nav>
+    <nav class="bar__lang" aria-label="Langue">
+      <a href="../" hreflang="en" lang="en" aria-label="English">EN</a>
+      <a href="../de/" hreflang="de" lang="de" aria-label="Deutsch">DE</a>
+      <a href="./" hreflang="fr" lang="fr" aria-current="page" aria-label="Français">FR</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ======================= Hero ======================= -->
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">Pour les fondateurs qui ont créé leur app avec l’IA</p>
+      <h1 class="hero__title" id="hero-title">Laissez&#8209;moi <em>casser votre app</em><span class="hero__period">.</span></h1>
+      <p class="hero__lede"><strong>Avant vos utilisateurs.</strong> Je suis Kevin Ley, développeur full-stack senior. J’examine en profondeur votre code et votre produit, et je vous donne un plan pour rendre votre app plus robuste.</p>
+      <p class="hero__cta">
+        <a class="btn" href="mailto:hello@kevinley.dev?subject=Audit%20de%20mon%20app" data-mail>Envoyez-moi votre app<span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="#prices">Voir les tarifs</a>
+      </p>
+    </div>
+
+    <div class="hero__caption">
+      <p class="hero__tagline">Une main <em class="hero__break">la casse</em>. L’autre <em class="hero__fix">la répare</em>.</p>
+      <p class="hero__hint" aria-hidden="true" data-touch="Touchez une flamme">Survolez une flamme</p>
+    </div>
+
+    <div class="stage" data-stage>
+      <picture class="portrait">
+        <source type="image/avif" srcset="../assets/kevin-640.avif 640w, ../assets/kevin-1024.avif 1024w" sizes="(min-width: 1207px) 700px, (min-width: 552px) 58vw, 320px">
+        <img class="portrait__img" src="../assets/kevin-1024.jpg" srcset="../assets/kevin-640.jpg 640w, ../assets/kevin-1024.jpg 1024w" sizes="(min-width: 1207px) 700px, (min-width: 552px) 58vw, 320px" width="1024" height="1024" alt="Kevin Ley en sweat à capuche noir, les deux paumes levées" fetchpriority="high">
+      </picture>
+
+      <div class="flame flame--fire">
+        <button class="orb" type="button" aria-controls="skills-break">
+          <span class="orb__fire" aria-hidden="true"><i></i><i></i><i></i><b></b></span>
+          <span class="sr">Casser</span>
+        </button>
+        <ul class="skills" id="skills-break" aria-label="Ce que Kevin Ley essaie de casser">
+          <li class="skill" style="--i:0;--dx:-.2;--dy:-.95;--r:-4deg">Connexions et comptes</li>
+          <li class="skill" style="--i:1;--dx:-.75;--dy:-1.5;--r:3deg">Qui voit quoi</li>
+          <li class="skill" style="--i:2;--dx:.1;--dy:-2.05;--r:-2deg">Paiements</li>
+          <li class="skill" style="--i:3;--dx:-.5;--dy:-2.6;--r:4deg">Les données de vos clients</li>
+          <li class="skill" style="--i:4;--dx:-.15;--dy:-3.15;--r:-3deg">Saisies inattendues</li>
+          <li class="skill" style="--i:5;--dx:-.6;--dy:-3.7;--r:2deg">Une foule d’utilisateurs</li>
+        </ul>
+      </div>
+
+      <div class="flame flame--ice">
+        <button class="orb" type="button" aria-controls="skills-fix">
+          <span class="orb__fire" aria-hidden="true"><i></i><i></i><i></i><b></b></span>
+          <span class="sr">Réparer</span>
+        </button>
+        <ul class="skills" id="skills-fix" aria-label="Ce que Kevin Ley vous donne pour réparer">
+          <li class="skill" style="--i:0;--dx:.15;--dy:-.95;--r:4deg">Quoi corriger d’abord</li>
+          <li class="skill" style="--i:1;--dx:.37;--dy:-1.5;--r:-3deg">Comment le constater</li>
+          <li class="skill" style="--i:2;--dx:.8;--dy:-2.05;--r:-2deg">Des pistes de correction</li>
+          <li class="skill" style="--i:3;--dx:.25;--dy:-2.6;--r:4deg">Corriger avec vous</li>
+          <li class="skill" style="--i:4;--dx:.42;--dy:-3.15;--r:-4deg">Des tests pour que ça tienne</li>
+          <li class="skill" style="--i:5;--dx:.75;--dy:-3.7;--r:2deg">Des mises à jour plus sûres</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= Sound familiar ======================= -->
+<section class="section" id="familiar" aria-labelledby="familiar-title">
+  <div class="wrap">
+    <h2 class="section__title" id="familiar-title" data-reveal>Ça vous <em>parle</em>&#8239;?</h2>
+    <ol class="steps steps--moments" data-rail>
+      <li class="step"><span class="step__dot" aria-hidden="true"></span><p class="step__text" data-reveal>Vous avez créé la première version en un week-end, avec Lovable, Bolt, Cursor ou Claude.</p></li>
+      <li class="step"><span class="step__dot" aria-hidden="true"></span><p class="step__text" data-reveal>Des gens se sont inscrits. Certains paient.</p></li>
+      <li class="step"><span class="step__dot" aria-hidden="true"></span><p class="step__text" data-reveal>Quelque chose a planté à 2&nbsp;h du matin, et personne ne savait pourquoi.</p></li>
+      <li class="step"><span class="step__dot" aria-hidden="true"></span><p class="step__text" data-reveal>Chaque changement que vous demandez à l’IA casse autre chose.</p></li>
+      <li class="step"><span class="step__dot" aria-hidden="true"></span><p class="step__text" data-reveal>Un investisseur demande qui a vérifié le code.</p></li>
+      <li class="step step--here"><span class="step__dot" aria-hidden="true"></span><p class="step__text" data-reveal><strong>Vous êtes ici.</strong> Ça marche. Mais personne n’a encore regardé sous le capot.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= Self-check: the count is pure CSS, the script adds the rest ======================= -->
+<section class="section" id="check" aria-labelledby="check-title">
+  <div class="wrap">
+    <h2 class="section__title" id="check-title" data-reveal>Dix questions <em>sur votre app</em>.</h2>
+    <p class="section__lede" data-reveal>Cochez ce qui est vrai. Comptez ce que vous ne pouvez pas cocher.</p>
+    <div class="check" data-check data-reveal>
+      <ul class="check__list">
+        <li><input type="checkbox" id="q1"><label for="q1">Je sais qui peut voir les données de mes clients.</label></li>
+        <li><input type="checkbox" id="q2"><label for="q2">Les visiteurs ne peuvent pas voir les clés de mes comptes d’IA et de paiement.</label></li>
+        <li><input type="checkbox" id="q3"><label for="q3">Je le verrais si un paiement passait sans que mon app l’enregistre.</label></li>
+        <li><input type="checkbox" id="q4"><label for="q4">Si quelque chose effaçait mes données aujourd’hui, je récupérerais celles d’hier.</label></li>
+        <li><input type="checkbox" id="q5"><label for="q5">Je découvre les erreurs avant que mes clients me les signalent.</label></li>
+        <li><input type="checkbox" id="q6"><label for="q6">Personne ne peut créer des centaines de faux comptes en une minute.</label></li>
+        <li><input type="checkbox" id="q7"><label for="q7">Quand je change une chose, je sais que rien d’autre n’a cassé.</label></li>
+        <li><input type="checkbox" id="q8"><label for="q8">Je peux mettre une nouvelle version en ligne sans appréhension.</label></li>
+        <li><input type="checkbox" id="q9"><label for="q9">Mon app tiendrait encore si dix fois plus de gens l’utilisaient demain.</label></li>
+        <li><input type="checkbox" id="q10"><label for="q10">Un autre développeur pourrait comprendre mon code la semaine prochaine.</label></li>
+      </ul>
+      <div class="check__out">
+        <div class="check__bar">
+          <p class="check__count" role="status"><span class="check__n"></span> <span class="check__label" data-one="point à améliorer" data-many="points à améliorer">points à améliorer</span></p>
+          <a class="btn btn--small" href="mailto:hello@kevinley.dev?subject=Audit%20de%20mon%20app" data-mail>Parlons-en<span class="btn__arrow" aria-hidden="true">→</span></a>
+        </div>
+        <ul class="check__key" aria-live="polite">
+          <li data-band="none">Cochez ce qui est vrai.</li>
+          <li data-band="0"><b>0 – 2</b>Vous êtes en bonne forme. Un audit express peut le confirmer.</li>
+          <li data-band="1"><b>3 – 5</b>Un audit express vaut le coup avant votre prochain lancement.</li>
+          <li data-band="2"><b>6 – 10</b>Parlons-en bientôt.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= What I do ======================= -->
+<section class="section" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <h2 class="section__title" id="how-title" data-reveal>Ce que je fais <em>de votre app</em>.</h2>
+    <ol class="steps" data-rail>
+
+      <li class="step">
+        <span class="step__node" aria-hidden="true">1</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">J’y regarde de près.</h3>
+          <p class="step__body">Je lis votre code et j’utilise votre app comme vos clients, pour trouver les problèmes dans le code, dans l’app et dans le produit.</p>
+        </div>
+      </li>
+
+      <li class="step">
+        <span class="step__node" aria-hidden="true">2</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">J’essaie de la casser.</h3>
+          <p class="step__body">J’essaie ce que vos utilisateurs pourraient faire, et quelques choses qu’ils ne devraient pas faire.</p>
+          <figure class="panel">
+            <figcaption class="panel__bar"><span>Ce que j’ai essayé, et ce qui s’est passé</span><span>Exemple · une app inventée</span></figcaption>
+            <ul class="tried">
+              <li><span class="tried__mark" aria-hidden="true">✗</span><span class="tried__try">J’ai changé un numéro dans l’adresse web.</span><span class="tried__got">J’ai vu la commande d’un autre client.</span></li>
+              <li><span class="tried__mark" aria-hidden="true">✗</span><span class="tried__try">J’ai payé 1&nbsp;€ pour l’offre à 49&nbsp;€.</span><span class="tried__got">C’est passé.</span></li>
+              <li><span class="tried__mark" aria-hidden="true">✗</span><span class="tried__try">J’ai ouvert le code que votre site envoie à chaque visiteur.</span><span class="tried__got">La clé de votre compte OpenAI s’y trouvait.</span></li>
+              <li><span class="tried__mark" aria-hidden="true">✗</span><span class="tried__try">J’ai créé 300 comptes en une minute.</span><span class="tried__got">Rien ne m’a arrêté.</span></li>
+              <li class="is-ok"><span class="tried__mark" aria-hidden="true">✓</span><span class="tried__try">J’ai saisi un mauvais mot de passe 20 fois.</span><span class="tried__got">Bloqué au bout de 5. Bien.</span></li>
+              <li><span class="tried__mark" aria-hidden="true">✗</span><span class="tried__try">J’ai demandé à récupérer les données d’hier.</span><span class="tried__got">Il n’y avait pas de sauvegarde.</span></li>
+            </ul>
+          </figure>
+        </div>
+      </li>
+
+      <li class="step">
+        <span class="step__node" aria-hidden="true">3</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">Je trie ce que je trouve.</h3>
+          <p class="step__body">Chaque constat reçoit un niveau de gravité, pour que vous sachiez ce qui compte le plus.</p>
+          <ul class="sevs" aria-label="Niveaux de gravité">
+            <li><span class="sev sev--crit">Critique</span>Quelqu’un peut voir des données ou prendre de l’argent sans en avoir le droit.</li>
+            <li><span class="sev sev--high">Élevée</span>Quelque chose casse pour vos clients, ou va bientôt casser.</li>
+            <li><span class="sev sev--med">Moyenne</span>Ça vous ralentit ou agace vos utilisateurs. Rien n’est en danger.</li>
+            <li><span class="sev sev--low">Faible</span>À corriger quand vous y touchez de toute façon.</li>
+          </ul>
+          <article class="finding" aria-label="Exemple de constat">
+            <p class="finding__meta"><span>Exemple de constat</span><span class="sev sev--crit">Critique</span><span>Les données de vos clients</span></p>
+            <h4 class="finding__title">N’importe quel client connecté peut voir les commandes de tous les autres clients.</h4>
+            <div class="finding__parts">
+              <div>
+                <p class="finding__label">Comment le constater vous-même</p>
+                <ol class="finding__steps">
+                  <li>Connectez-vous avec n’importe quel compte client.</li>
+                  <li>Ouvrez une de vos commandes.</li>
+                  <li>Changez le numéro à la fin de l’adresse web.</li>
+                </ol>
+              </div>
+              <div>
+                <p class="finding__label">Pistes de correction</p>
+                <p class="finding__text">Avant que votre serveur n’envoie une commande, il vérifie qu’elle appartient bien à la personne qui la demande. Ensuite, un test pour que ça reste corrigé.</p>
+              </div>
+            </div>
+            <details class="finding__dev">
+              <summary>Pour votre développeur</summary>
+              <p>L’endpoint des commandes renvoie n’importe quelle commande à partir de son ID, sans vérifier à qui elle appartient. Ajoutez le contrôle de propriété dans le handler, ou une politique de row-level security si vous utilisez Supabase, et couvrez-le par un test de bout en bout.</p>
+            </details>
+          </article>
+        </div>
+      </li>
+
+      <li class="step">
+        <span class="step__node" aria-hidden="true">4</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">Vous recevez un plan.</h3>
+          <p class="step__body">Je classe tous les constats par ordre de priorité&nbsp;: ce qu’il faut corriger maintenant, ce qui vient ensuite et ce qui peut attendre. Nous le passons en revue ensemble lors d’un appel.</p>
+          <div class="plan" aria-label="Exemple de plan">
+            <div class="plan__col plan__col--now">
+              <h4 class="plan__head">À corriger maintenant</h4>
+              <ul><li>Les clients voient les commandes des autres</li><li>Les prix peuvent être modifiés dans le navigateur</li><li>Votre clé OpenAI est publique</li></ul>
+            </div>
+            <div class="plan__col">
+              <h4 class="plan__head">Ensuite</h4>
+              <ul><li>Aucune sauvegarde</li><li>Aucune limite sur les inscriptions</li></ul>
+            </div>
+            <div class="plan__col">
+              <h4 class="plan__head">Plus tard</h4>
+              <ul><li>Les nouveaux utilisateurs voient un tableau de bord vide</li><li>La recherche ralentit avec beaucoup de clients</li></ul>
+            </div>
+          </div>
+          <p class="note">Exemple. Votre budget décide jusqu’où nous descendons dans la liste.</p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= How we work, and what it costs ======================= -->
+<section class="section" id="prices" aria-labelledby="prices-title">
+  <div class="wrap">
+    <h2 class="section__title" id="prices-title" data-reveal>Comment nous travaillons, et <em>ce que ça coûte</em>.</h2>
+    <p class="section__lede" data-reveal>120&nbsp;€ de l’heure, hors TVA. Chaque projet commence petit. Après chaque étape, vous décidez si nous allons plus loin.</p>
+    <ol class="steps" data-rail>
+      <li class="step">
+        <span class="step__node" aria-hidden="true">1</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">Un premier appel.</h3>
+          <p class="step__body">Nous faisons connaissance, vous me montrez votre produit, et nous décidons de ce qui compte le plus.</p>
+        </div>
+      </li>
+      <li class="step step--start">
+        <span class="step__node" aria-hidden="true">2</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">Un audit express.</h3>
+          <p class="step__body">À un prix d’entrée convenu à l’avance. Je parcours votre app et vous livre les constats les plus importants, triés, en quelques jours.</p>
+          <p class="price"><span class="price__tag">Chaque projet commence ici</span><span class="price__sum">960&nbsp;€</span><span class="price__meta">Exemple · environ 8&nbsp;heures · quelques jours</span></p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__node" aria-hidden="true">3</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">Un deuxième appel.</h3>
+          <p class="step__body">Nous passons les constats en revue ensemble et parlons de la suite.</p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__node" aria-hidden="true">4</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">L’audit approfondi.</h3>
+          <p class="step__body">Je passe en revue chaque partie du code et du produit, et vous recevez un plan complet, classé par priorité.</p>
+          <p class="price"><span class="price__sum">3&#8239;600&nbsp;€</span><span class="price__meta">Exemple · environ 30&nbsp;heures · de quelques jours à quelques semaines</span></p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step__node" aria-hidden="true">5</span>
+        <div class="step__main" data-reveal>
+          <h3 class="step__title">Corriger ensemble.</h3>
+          <p class="step__body">Si vous le souhaitez, je corrige ce qui compte le plus, avec vous ou pour vous, au même tarif horaire. Nous pouvons continuer à travailler ensemble ensuite.</p>
+          <p class="price"><span class="price__sum">9&#8239;600&nbsp;€</span><span class="price__meta">Exemple · audit approfondi et corrections · environ 80&nbsp;heures · de quelques semaines à quelques mois</span></p>
+        </div>
+      </li>
+    </ol>
+    <ul class="facts" data-reveal>
+      <li>Le périmètre et le prix sont toujours convenus avant de commencer.</li>
+      <li>Si nous définissons à l’avance ce qu’il faut faire, je peux vous proposer un prix forfaitaire pour le projet.</li>
+      <li>Votre budget définit le périmètre. J’adapte mon travail en conséquence et je commence par ce qui compte le plus.</li>
+      <li>Je travaille sur un seul projet à la fois, en parallèle de mon emploi principal.</li>
+    </ul>
+    <p class="note" data-reveal>Les prix sont des exemples pour vous donner une idée. Votre app et votre budget déterminent le nombre d’heures réel. Tous les prix s’entendent hors TVA.</p>
+  </div>
+</section>
+
+<!-- ======================= Who's looking at your app ======================= -->
+<section class="section" id="why" aria-labelledby="why-title">
+  <div class="wrap">
+    <h2 class="section__title" id="why-title" data-reveal>Qui regarde <em>votre app</em>.</h2>
+    <p class="section__lede" data-reveal>Je développe pour le web depuis 2008, et j’ai plongé en profondeur dans de nombreuses apps SaaS et mobiles. Aujourd’hui, je veux mettre mes super-pouvoirs au service d’autres startups pour les aider à réussir.</p>
+    <div class="proof" data-reveal>
+      <div class="proof__group">
+        <h3 class="proof__head">Trouver ce qui casse</h3>
+        <ul class="proof__list">
+          <li>J’ai écrit les règles que suivent nos développeurs quand ils relisent le code les uns des autres.</li>
+          <li>Notre app n’avait aucun test automatique qui l’utilise comme le ferait un client. Je les ai mis en place.</li>
+          <li>Quand l’app en production tombe en panne, c’est vers moi qu’on se tourne. Les problèmes urgents représentent 17,5&#8239;% de mon travail, contre 13,1&#8239;% pour l’ensemble de l’équipe.</li>
+        </ul>
+      </div>
+      <div class="proof__group">
+        <h3 class="proof__head">Construire, avec l’IA et en équipe</h3>
+        <ul class="proof__list">
+          <li>J’ai mis en place les outils de développement par IA pour toute notre équipe.</li>
+          <li>Aujourd’hui, je dirige une équipe de trois à cinq développeurs dans une entreprise SaaS.</li>
+          <li>J’ai fait passer une équipe de 2 à 15&nbsp;développeurs en moins de deux ans.</li>
+          <li>J’ai lancé des projets moi-même&nbsp;: une mini-entreprise au lycée, dont l’app a atteint 2&#8239;000&nbsp;téléchargements en quelques jours, puis des années de projets de startup personnels.</li>
+        </ul>
+      </div>
+    </div>
+    <!-- TODO: add a real quote from someone who has worked with Kevin, then remove this comment:
+    <blockquote class="quote" data-reveal>
+      <p>Citation.</p>
+      <footer>Nom, rôle</footer>
+    </blockquote>
+    -->
+    <p class="why__note" data-reveal>Vous ne trouverez pas de noms de clients ici. La confidentialité et la discrétion me tiennent à cœur.</p>
+  </div>
+</section>
+
+<!-- ======================= Questions ======================= -->
+<section class="section" id="questions" aria-labelledby="questions-title">
+  <div class="wrap">
+    <h2 class="section__title" id="questions-title" data-reveal>Vos questions <em>avant de m’écrire</em>.</h2>
+    <div class="faq" data-reveal>
+      <details>
+        <summary>Allez-vous me dire de réécrire mon app&#8239;?</summary>
+        <p>Ça dépend. Si les constats sont vraiment graves, quasi impossibles à démêler et trop risqués pour la production, alors oui. Dans ce cas, je planifie la reconstruction avec vous&nbsp;: comment configurer vos outils d’IA et votre façon de travailler avec eux, pour que la nouvelle version soit robuste dès le départ.</p>
+      </details>
+      <details>
+        <summary>Je n’ai pas de profil technique. Pouvons-nous quand même travailler ensemble&#8239;?</summary>
+        <p>Oui. Chaque constat explique avec des mots simples ce qui ne va pas et pourquoi c’est important, avec des étapes à suivre pour le constater vous-même. Les détails techniques sont là pour la personne qui fera la correction.</p>
+      </details>
+      <details>
+        <summary>Avec quelles technologies travaillez-vous&#8239;?</summary>
+        <p>N’importe quelle stack, tant qu’elle repose sur JavaScript ou TypeScript.</p>
+      </details>
+      <details>
+        <summary>Est-ce un audit de sécurité&#8239;?</summary>
+        <p>Non, ce n’est pas un test de sécurité certifié. Mais si je trouve des problèmes de sécurité, ils figurent dans le rapport.</p>
+      </details>
+      <details>
+        <summary>Qu’advient-il de mon code&#8239;?</summary>
+        <p>Je signe un accord de confidentialité (NDA) si vous le souhaitez. Une fois le travail terminé, tout ce qui vous appartient vous est remis.</p>
+      </details>
+      <details>
+        <summary>Combien de temps ça prend&#8239;?</summary>
+        <p>Un audit express prend quelques jours. Un audit approfondi, de quelques jours à quelques semaines. Les corrections et la collaboration peuvent durer des semaines, voire des mois.</p>
+      </details>
+      <details>
+        <summary>Pouvez-vous aussi corriger les problèmes&#8239;?</summary>
+        <p>Oui, avec vous ou pour vous, au même tarif de 120&nbsp;€ de l’heure, hors TVA.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= Contact ======================= -->
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 class="contact__title" id="contact-title" data-reveal>Dites-moi où ça <em>brûle</em>.</h2>
+    <p class="contact__body" data-reveal>Envoyez-moi une phrase sur ce que vous avez créé et ce dont vous avez besoin, le lien vers votre app, votre score aux dix questions, et quelques créneaux qui vous conviennent pour un premier appel. Le bouton ouvre un e-mail qui vous montre quoi écrire.</p>
+    <!-- TODO: hello@kevinley.dev is a placeholder. Replace it here, in the hero button, in the self-check button and in the JSON-LD above. -->
+    <!-- The email draft every mail button opens. See the English page for how it works. -->
+    <template id="mail-draft" data-subject="Audit de mon app" data-count="{n} sur 10 non cochées" data-list="Celles que je n’ai pas pu cocher&nbsp;:" data-nocount="[Votre score, si vous avez répondu aux dix questions de la page.]">Bonjour Kevin,
+
+Ce que j’ai créé et ce dont j’ai besoin&nbsp;:
+[Une phrase. Par exemple&nbsp;: «&#8239;Un outil de réservation pour studios de yoga. Les clients paient dans l’app, et je veux m’assurer que c’est sécurisé avant le lancement.&#8239;»]
+
+Lien vers mon app&nbsp;: [lien]
+Créée avec&nbsp;: [par exemple Lovable, Bolt, Cursor ou Claude]
+
+Mon score aux dix questions&nbsp;:
+{count}
+
+Créneaux possibles pour un premier appel&nbsp;:
+[Deux ou trois dates et heures, avec votre fuseau horaire. Par exemple&nbsp;: mardi à 18&nbsp;h ou jeudi à 12&nbsp;h&nbsp;30, heure de Paris.]
+
+[Votre nom]</template>
+    <p class="contact__actions" data-reveal>
+      <a class="mail" href="mailto:hello@kevinley.dev?subject=Audit%20de%20mon%20app" data-mail>hello@kevinley.dev<span class="mail__arrow" aria-hidden="true">→</span></a>
+      <button class="contact__copy" type="button" data-copy data-done="Copiée" hidden>Copier l’adresse</button>
+      <!-- TODO: add the booking link once it exists:
+      <a class="contact__alt" href="https://cal.com/your-name" rel="noopener" target="_blank">Ou réservez directement un premier appel</a>
+      -->
+    </p>
+  </div>
+</section>
+</main>
+
+<!-- ======================= Footer ======================= -->
+<!-- TODO: legal notice (business name, address, VAT number) once Kevin has them -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__inner">
+      <span>© 2026 Kevin Ley</span>
+      <span>Prix hors TVA</span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
