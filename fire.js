@@ -187,17 +187,23 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
        normal cursor comes back. Its light shows the wall behind the page. Mouse only. ---- */
     const PER = 3, MAX = 30000, OUT = 1000, GROW = 5;
     /* Easter eggs on the wall: what the orange flame shows broken, the blue
-       flame shows fixed, in the same spot. Each sits in the empty band above a
-       section: [which section, 0 = left / 1 = right, broken, fixed]. */
+       flame shows fixed, in the same spot. Most hide around the flames, a few
+       further down. [where, broken, fixed]; where = spot + "-l" or "-r" (the
+       column's left or right edge):
+         top   beside the small line above the headline
+         cap   beside "One hand breaks it. The other fixes it."
+         hand  below the hands, beside the arms
+         s2    the empty band above section 2 (0 = the first after the hero) */
+    // The spots beside the caption and the hands are the tightest: short lines go there.
     const EGGS = [
-      [0, 0, "// TODO: fix before launch", "// fixed before launch"],
-      [1, 1, 'const key = "sk_live_…"', "const key = env.STRIPE_KEY"],
-      [2, 0, "500 Internal Server Error", "200 OK"],
-      [2, 1, '"it works on my machine"', '"it works on every machine"'],
-      [3, 1, "WHERE id = ${input}", "WHERE id = $1"],
-      [4, 0, "if (user.isAdmin || true)", "if (user.isAdmin)"],
-      [5, 1, "catch (e) {}", "catch (e) { report(e) }"],
-      [6, 0, "Tests: 0 passed", "Tests: 142 passed"],
+      ["top-l", "// TODO: fix before launch", "// fixed before launch"],
+      ["top-r", '"it works on my machine"', '"it works on every machine"'],
+      ["cap-l", "Tests: 0 passed", "Tests: 142 passed"],
+      ["cap-r", "WHERE id = ${input}", "WHERE id = $1"],
+      ["hand-l", "catch (e) {}", "catch (e) { report(e) }"],
+      ["hand-r", "if (user.isAdmin || true)", "if (user.isAdmin)"],
+      ["s2-l", 'const key = "sk_live_…"', "const key = env.STRIPE_KEY"],
+      ["s4-r", "500 Internal Server Error", "200 OK"],
     ];
     const ICON = {
       bug: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><ellipse cx="8" cy="9.5" rx="3.4" ry="4.4"/><path d="M8 5.5v8.5M6.2 5 4.8 3.2M9.8 5l1.4-1.8M4.6 8H2.2M4.8 11.2l-2 1.4M11.4 8h2.4M11.2 11.2l2 1.4"/></svg>',
@@ -213,9 +219,9 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       c.cv.className = "cursor-fire";
       wall.setAttribute("aria-hidden", "true");
       c.cv.setAttribute("aria-hidden", "true");
-      const egg = EGGS.map(([, side, broken, fixed]) => {
+      const egg = EGGS.map(([where, broken, fixed]) => {
         const el = document.createElement("div");
-        el.className = side ? "egg egg--end" : "egg";
+        el.className = where.endsWith("-r") ? "egg egg--end" : "egg";
         [["bug", broken], ["fix", fixed]].forEach(([k, text]) => {
           const face = document.createElement("span");
           face.className = "egg__" + k;
@@ -225,28 +231,49 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         });
         return eggs.appendChild(el);
       });
-      // Put each egg in the middle of the band above its section, at the
-      // column's left or right edge. Again whenever the page changes size.
+      // Put each egg at its spot, on the column's left or right edge, in page
+      // coordinates. An egg that doesn't fit its spot at this width stays
+      // hidden rather than run into the page. Again whenever the page resizes.
       const place = () => {
-        const secs = document.querySelectorAll("main > .section, main > .contact");
-        const col = document.querySelector("main .wrap");
+        const q = (s) => document.querySelector(s);
+        const col = q("main .wrap"), cap = q(".hero__caption"), top = q(".hero__eyebrow"), orb = q(".orb");
         if (!col) return;
-        const r = col.getBoundingClientRect(), cs = getComputedStyle(col);
-        const left = r.left + parseFloat(cs.paddingLeft);
-        const width = r.width - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-        EGGS.forEach(([s, side], i) => {
-          const sec = secs[s];
-          egg[i].hidden = !sec;
-          if (!sec) return;
-          const pad = parseFloat(getComputedStyle(sec).paddingTop);
-          egg[i].style.left = `${left + side * width}px`;
-          egg[i].style.top = `${sec.getBoundingClientRect().top + scrollY + pad * 0.45}px`;
+        const box = (el) => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top + scrollY, b: r.bottom + scrollY }; };
+        const cs = getComputedStyle(col), c = box(col);
+        const L = c.l + parseFloat(cs.paddingLeft), R = c.r - parseFloat(cs.paddingRight);
+        const secs = document.querySelectorAll("main > .section, main > .contact");
+        // Around the photo the eggs may reach into the margin, up to 26 px from
+        // the window's edge, so more of them fit on small laptops.
+        const HL = Math.max(26, L - 48), HR = Math.min(document.documentElement.clientWidth - 26, R + 48);
+        // A spot: [y, left edge, right edge, room from the left edge, room from the right edge].
+        const beside = (b) => [(b.t + b.b) / 2, HL, HR, b.l - 24 - HL, HR - b.r - 24];
+        const spot = (z) => {
+          if (z === "top" && top) return beside(box(top));
+          if (z === "cap" && cap) return beside(box(cap));
+          if (z === "hand" && orb) {
+            // The arms reach about a tenth of the photo's width in from its sides.
+            const s = box(stage), o = box(orb), w = (s.r - s.l) * 0.1;
+            return [(o.b + s.b) / 2, HL, HR, s.l + w - 16 - HL, HR - s.r + w - 16];
+          }
+          const sec = z[0] === "s" && secs[+z.slice(1)];
+          if (!sec) return null;
+          return [box(sec).t + parseFloat(getComputedStyle(sec).paddingTop) * 0.45, L, R, Infinity, Infinity];
+        };
+        EGGS.forEach(([where], i) => {
+          const [z, side] = where.split("-"), s = spot(z), el = egg[i];
+          el.hidden = !s;
+          if (!s) return;
+          const right = side === "r";
+          el.style.left = `${right ? s[2] : s[1]}px`;
+          el.style.top = `${s[0]}px`;
+          // The label's 10 px padding hangs outside the edge, so it doesn't count.
+          el.hidden = el.offsetWidth - 10 > (right ? s[4] : s[3]);
         });
       };
-      place();
-      new ResizeObserver(place).observe(document.body);
       wall.append(paper, eggs);
       document.body.append(wall, c.cv);
+      place(); // in the page first, so the eggs have a width to measure
+      new ResizeObserver(place).observe(document.body);
       const cf = { heat: 0, time: 2, ramp: fires[0].ramp };
       const fitc = (w, h, max) => { c.size(w, h, max); cf.cx = c.cv.width / 2; cf.cy = c.cv.height / 3; cf.unit = c.cv.width / 10; };
       fitc(120, 144, 1.5);

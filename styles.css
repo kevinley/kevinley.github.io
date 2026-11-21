@@ -469,11 +469,12 @@ html.is-burning, html.is-burning * { cursor: none !important; }
   will-change: transform;
 }
 
-/* Easter eggs: bits of code drawn on the wall, in the empty band above each
-   section. The orange flame shows them broken, the blue flame fixed. They
-   scroll with the page (fire.js places them; the list is EGGS there). */
+/* Easter eggs: bits of code drawn on the wall, most around the flames, a few
+   further down. The orange flame shows them broken, the blue flame fixed.
+   They scroll with the page (fire.js places them; the list is EGGS there). */
 .wall__eggs { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-origin: 0 0; color: var(--light); }
 .egg { position: absolute; display: grid; translate: -10px -50%; font: 400 14px/1 var(--mono); letter-spacing: -.01em; white-space: nowrap; }
+.egg[hidden] { display: none; }
 .egg--end { translate: calc(10px - 100%) -50%; } /* the label's padding hangs outside the column, so the text lines up with it */
 /* Each sits on a label in the page color, so no grid line runs through it. */
 .egg > span { grid-area: 1 / 1; display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 4px; background: var(--bg); }
