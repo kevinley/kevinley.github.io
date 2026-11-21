@@ -406,6 +406,18 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   height: calc(6 * var(--orb));
   pointer-events: none;
 }
+/* The ring that flies off where a dropped flame lands (fire.js adds it, and
+   removes it when it's done). */
+.blast {
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--glow);
+  border-radius: 50%;
+  box-shadow: 0 0 24px var(--glow), inset 0 0 16px var(--glow);
+  pointer-events: none;
+  animation: blast .7s cubic-bezier(.15, .7, .3, 1) forwards;
+}
+@keyframes blast { from { transform: scale(.4); opacity: 1; } to { transform: scale(4.5); opacity: 0; } }
 @media (prefers-reduced-motion: no-preference) { .stage__gl { animation: ignite .3s var(--ease) both; } }
 @keyframes ignite { from { opacity: 0; } }
 

@@ -16,8 +16,11 @@
      shading every pixel. Alpha = brightness, so the canvas is see-through where
      there is no flame (and the cursor flame still shows on white buttons). ---- */
   const VS = "attribute vec2 a;void main(){gl_Position=vec4(a,0,1);}";
+  /* S stretches the flame upward (a falling flame trails a tail), and B is how
+     far a landing burst has got, 0 to 1 (1 = no burst): sparks fly out of the
+     core and a flash spreads and fades. */
   const FS = `precision highp float;
-uniform vec2 C;uniform float U,T,H;uniform vec3 M,E;
+uniform vec2 C;uniform float U,T,H,S,B;uniform vec3 M,E;
 float h(vec3 p){p=fract(p*.3183+.1);p*=17.;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
 float n(vec3 x){vec3 i=floor(x),f=fract(x);f*=f*(3.-2.*f);
 return mix(mix(mix(h(i),h(i+vec3(1,0,0)),f.x),mix(h(i+vec3(0,1,0)),h(i+vec3(1,1,0)),f.x),f.y),
@@ -27,6 +30,7 @@ vec3 ramp(float x){return M*pow(vec3(clamp(x,0.,1.)),E);}
 float hs(float s){return fract(sin(s*91.7)*43758.5);}
 void main(){
 vec2 p0=(gl_FragCoord.xy-C)/U;
+if(p0.y>0.)p0.y/=S;
 vec2 p=p0/(1.+.18*H);
 float t=T;
 vec3 c=vec3(0);
@@ -44,6 +48,11 @@ for(int i=0;i<28;i++){float s=float(i);if(hs(s+11.)>.3+.3*H)continue;
 float l=fract(t*(.22+.2*hs(s))+hs(s+3.));
 vec2 o=vec2((hs(s+7.)-.5)*(1.3+.3*H)+sin(t*3.+s)*.14*l,.2+l*(2.8+.8*H));
 c+=ramp(.9)*(1.-smoothstep(0.,.045+.008*H,length(p0-o)))*(1.-l)*(.6+.4*H);}
+if(B<1.&&dot(p0,p0)<30.){float z=1.-pow(1.-B,3.),w=pow(1.-B,1.5);
+c+=ramp(.75)*exp(-dot(p0,p0)/(.25+B*2.5))*(1.-B)*1.4;
+for(int i=0;i<24;i++){float s=float(i)+40.,a=3.1416*(1.3*hs(s)-.15),sp=.9+1.5*hs(s+1.);
+vec2 o=vec2(cos(a),sin(a))*sp*z*1.5-vec2(0.,B*B*1.2);
+c+=ramp(.95)*(1.-smoothstep(0.,.06,length(p0-o)))*w*1.6;}}
 vec2 v=vec2(p0.x*.1+.5,(p0.y+4.)/12.);
 c*=smoothstep(0.,.1,v.x)*(1.-smoothstep(.9,1.,v.x))*smoothstep(0.,.1,v.y)*(1.-smoothstep(.9,1.,v.y));
 vec3 o=1.-exp(-c*1.5);o+=(h(vec3(gl_FragCoord.xy,T*60.))-.5)/128.*smoothstep(0.,.03,o.r+o.g+o.b);
@@ -80,7 +89,7 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         gl.enableVertexAttribArray(0);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
         gl.enable(gl.SCISSOR_TEST);
-        this.U = { C: u("C"), U: u("U"), T: u("T"), H: u("H"), M: u("M"), E: u("E") };
+        this.U = { C: u("C"), U: u("U"), T: u("T"), H: u("H"), S: u("S"), B: u("B"), M: u("M"), E: u("E") };
         return true;
       },
       // CSS pixels in, canvas pixels out: device pixels (at most `max`) × k.
@@ -96,14 +105,17 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
     };
   };
   // Draw one flame f into the strip x0 to x1 of context g. f.ramp is "--gl":
-  // R G B multipliers, then R G B exponents.
+  // R G B multipliers, then R G B exponents. The intro's drop and landing move
+  // (dy), grow, heat up (boom), stretch and burst the flame on top of that.
   const draw = (g, f, x0 = 0, x1 = g.cv.width) => {
     const { gl, U } = g, r = f.ramp;
     gl.scissor(x0, 0, x1 - x0, g.cv.height);
-    gl.uniform2f(U.C, f.cx, f.cy);
-    gl.uniform1f(U.U, f.unit);
+    gl.uniform2f(U.C, f.cx, f.cy + (f.dy || 0));
+    gl.uniform1f(U.U, f.unit * (f.grow || 1));
     gl.uniform1f(U.T, f.time);
-    gl.uniform1f(U.H, f.heat);
+    gl.uniform1f(U.H, f.heat + (f.boom || 0));
+    gl.uniform1f(U.S, f.stretch || 1);
+    gl.uniform1f(U.B, f.burst ?? 1);
     gl.uniform3f(U.M, r[0], r[1], r[2]);
     gl.uniform3f(U.E, r[3], r[4], r[5]);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -129,6 +141,15 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
     });
     cv.className = "stage__gl";
     cv.setAttribute("aria-hidden", "true");
+    // The flames drop in (see Intro), so the hands start empty and unlit.
+    if (!reduce) {
+      fires.forEach((f) => (f.dy = 1e5));
+      stage.style.transition = "none";
+      stage.style.setProperty("--fire-a", "0");
+      stage.style.setProperty("--ice-a", "0");
+      getComputedStyle(stage).opacity;
+      stage.style.transition = "";
+    }
     stage.append(cv);
     // Where each core is, measured where the browser has just laid out the page.
     const fit = () => {
@@ -161,10 +182,11 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       // Frames 30 to 90 on screen, once the page has loaded: if they average
       // under 50 per second, the chip can't keep up, so draw the hero flames at
       // 60% resolution from then on.
-      if (onStage && gap && q === 1 && document.readyState === "complete" && ++frames > 30) {
+      if (onStage && !intro && gap && q === 1 && document.readyState === "complete" && ++frames > 30) {
         slow += gap;
         if (frames === 90 && slow / 60 > 20) { q = 0.6; fit(); }
       }
+      if (intro) drop(now);
       if (onStage) {
         fires.forEach((f) => {
           const hot = f.orb.matches(":hover") || f.orb.classList.contains("is-open") ? 1 : 0;
@@ -179,6 +201,102 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       raf = (onStage || lit) && !document.hidden ? requestAnimationFrame(tick) : (last = 0);
     };
     const wake = () => { if (!raf && !document.hidden) raf = requestAnimationFrame(tick); };
+
+    /* ---- Intro. With a mouse, the first time it enters the photo (or a key
+       reaches a flame), the fire drops in from above the window, the ice right
+       behind it; the hands have to be in view too, or it waits for them. Without
+       a mouse, it happens when the hands come into view. They fall fast,
+       speeding up like anything dropped, and trail a tail as they go. Each one
+       explodes as it lands: the flame swells and flares, sparks burst out, a
+       ring flies off, the light on the hand flashes and the photo jolts.
+       While they fall, the canvas reaches up to the top of the window. ---- */
+    const WAIT = 0.08, LAG = 0.22, BURST = 0.9; // seconds
+    const mouse = matchMedia("(hover: hover) and (pointer: fine)").matches;
+    let intro = null, landed = false, then = null; // then: what waits for the landing
+    const land = (f) => {
+      const v = f.ice ? "--ice-a" : "--fire-a";
+      stage.style.transition = "none";
+      stage.style.setProperty(v, "1.8");
+      getComputedStyle(stage).getPropertyValue(v); // flash now, then fade to normal
+      stage.style.transition = "";
+      stage.style.removeProperty(v);
+      const ring = document.createElement("span");
+      ring.className = "blast";
+      ring.addEventListener("animationend", () => ring.remove());
+      f.orb.append(ring);
+      stage.animate([{ transform: "none" }, { transform: `translateY(${f.ice ? 3 : 5}px)` }, { transform: "none" }],
+        { duration: 300, easing: "cubic-bezier(.2,.8,.3,1)" });
+    };
+    const drop = (now) => {
+      if (!intro.at) intro.at = now;
+      const t = (now - intro.at) / 1000 - WAIT;
+      let busy = false;
+      fires.forEach((f) => {
+        const s = t - (f.ice ? LAG : 0);
+        if (s < 0) { busy = true; return; }
+        if (s < f.fall) {
+          const k = s / f.fall;
+          f.dy = f.dy0 * (1 - k * k);
+          f.stretch = 1 + 1.6 * k;
+          f.grow = 0.9;
+          f.boom = 0.6;
+          busy = true;
+          return;
+        }
+        const l = s - f.fall;
+        if (!f.landed) { f.landed = true; land(f); }
+        f.dy = 0;
+        f.stretch = 1;
+        if (l < BURST) {
+          f.grow = 1 + 0.75 * (l < 0.06 ? l / 0.06 : Math.exp(-(l - 0.06) * 7));
+          f.boom = 3 * Math.exp(-l * 5);
+          f.burst = l / BURST;
+          busy = true;
+        } else f.grow = f.boom = f.burst = undefined;
+      });
+      if (!busy) {
+        intro = null;
+        landed = true;
+        cv.style.height = cv.style.transform = "";
+        if (then) then();
+      }
+    };
+    const begin = () => {
+      const r = cv.getBoundingClientRect(), d = cv.width / r.width;
+      // Reach up to the top of the window. A transform, not top, so it's no layout shift.
+      const ext = Math.max(0, Math.ceil(r.top));
+      if (ext) { cv.style.height = `calc(6 * var(--orb) + ${ext}px)`; cv.style.transform = `translateY(${-ext}px)`; }
+      fires.forEach((f) => {
+        const o = f.orb.getBoundingClientRect();
+        // Start 1.5 ball-radii above the window; the longer the fall, the longer it takes.
+        const dist = o.top + o.height / 2 + o.width * 0.75;
+        f.dy0 = dist * d;
+        f.fall = 0.16 + 0.011 * Math.sqrt(Math.max(dist, 0));
+      });
+      intro = { at: 0 };
+      wake();
+    };
+    const watch = () => {
+      let seen = false, near = !mouse, done = false;
+      const go = () => {
+        if (done || !seen || !near) return;
+        done = true;
+        io.disconnect();
+        stage.removeEventListener("pointerenter", enter);
+        stage.removeEventListener("focusin", enter);
+        begin();
+      };
+      const enter = (e) => { if (e.pointerType !== "touch") { near = true; go(); } };
+      // Seen: the whole fire ball is on screen.
+      const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting; go(); }, { threshold: 1 });
+      io.observe(fires.find((f) => !f.ice).orb);
+      if (mouse) {
+        stage.addEventListener("pointerenter", enter);
+        stage.addEventListener("focusin", enter);
+        near = stage.matches(":hover"); // already on the photo when the page finished loading
+      }
+    };
+    if (document.readyState === "complete") watch(); else addEventListener("load", watch, { once: true });
 
     /* ---- Burning cursor. Hover a flame and the cursor turns into a flame of
        that color, fully alight after 1 s; its core is where clicks land. It then
@@ -346,8 +464,15 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
     // The cursor's context is made the first time a mouse enters the stage:
     // most visitors never hover a flame, and a context takes up to 130 ms to
     // make. The cursor fades in over a second, which hides the wait. Its canvas
-    // gets its size first, so it is allocated once.
-    if (matchMedia("(hover: hover) and (pointer: fine)").matches) stage.addEventListener("pointerenter", () => {
+    // gets its size first, so it is allocated once. The same mouse starts the
+    // intro, so the cursor waits until the flames have landed: making it
+    // mid-fall would stutter the drop.
+    if (mouse) stage.addEventListener("pointerenter", () => {
+      if (!landed) { then = arm; return; }
+      arm();
+    }, { once: true });
+    function arm() {
+      then = null;
       const ccv = document.createElement("canvas");
       const d = Math.min(devicePixelRatio || 1, 1.5);
       ccv.width = Math.round(120 * d); ccv.height = Math.round(144 * d);
@@ -360,6 +485,6 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         fires.forEach((f) => { if (f.orb.matches(":hover")) f.orb.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" })); });
       };
       if (c) go();
-    }, { once: true });
+    }
   }
 })();

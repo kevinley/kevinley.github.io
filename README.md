@@ -92,6 +92,14 @@ How the flames stay cheap (all in `fire.js`):
 - **The light on the photo flickers with opacity,** which the browser blends without redrawing. A brightness filter made it redraw the masked light every frame.
 - **Paused** when the photo is off screen or the tab is in the background.
 
+## Flames drop in
+
+The flames don't start in the hands. With a mouse, the first time it enters the photo (or the keyboard reaches a flame), the fire drops in from above the window and the ice follows 0.22 s behind. The hands have to be on screen too: if they aren't yet, the drop waits until you scroll to them. Phones and other touch screens have no mouse, so there it happens when the hands come into view. They fall fast, speeding up like anything dropped, with their tails streaming up. Each one explodes as it lands: the flame swells and flares, sparks burst out, a ring flies off (`.blast` in `styles.css`), the light on that hand flashes and the photo jolts a few pixels. With reduced motion, or without WebGL, the flames are simply there.
+
+- **Timing:** `WAIT` (pause before the drop), `LAG` (how far the ice is behind) and `BURST` (how long the explosion lasts) at the top of the Intro part of `fire.js`. The fall takes about half a second from the top of a large window; `begin()` works it out from the distance.
+- **The burning cursor** is made only after the flames have landed, so making its WebGL context doesn't stutter the drop.
+- **While they fall,** the flames' canvas reaches up to the top of the window (with a transform, so it doesn't count as a layout shift), then shrinks back.
+
 ## Burning cursor
 
 With a mouse, hovering a flame turns the cursor into a flame of that color. The normal cursor is hidden, and the flame's bright core is where clicks land. The flame grows with every second of hover, up to 5× at 5 seconds, and its light grows with it. It keeps burning 3 seconds for every second of hover, 30 seconds at most, then goes out within 1 second and the normal cursor comes back. Its light shows the wall behind the page, colored orange or blue by the flame. Touch screens and reduced motion skip it.
