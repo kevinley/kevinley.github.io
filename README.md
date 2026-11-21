@@ -33,24 +33,35 @@ Search for `TODO` in `index.html`:
 | | Budget (gzip) | Now |
 |---|---|---|
 | HTML | 15 KB | 7.7 KB |
-| CSS | 14 KB | 9.2 KB |
-| JS | 4 KB | 4.0 KB |
+| CSS | 14 KB | 9.7 KB |
+| JS the page needs | 4 KB | 2.0 KB (`script.js`) |
+| JS for the effects | – | 4.1 KB (`fire.js`, fetched after the page has loaded) |
 | Font files | 2 | 2 (Inter Tight latin, regular + italic, 69 KB) |
 
-A first visit is about 105 KB and 7 requests, all from the same host. The photo ships as AVIF (9 KB on phones, 19 KB on laptops), with a JPEG fallback. The WebGL flames start only after the page has loaded.
+A first visit is about 113 KB on phones and 121 KB on laptops, in 8 requests, all from the same host. The photo ships as a transparent AVIF (13 KB on phones, 21 KB on laptops), with a JPEG fallback. `script.js` fetches `fire.js` (the WebGL flames and the burning cursor) only once the page has loaded and the browser is idle, so the effects never slow down the first paint.
+
+## Burning cursor
+
+With a mouse, hovering a flame turns the cursor into a flame of that color. The normal cursor is hidden, and the flame's bright core is where clicks land. The flame grows with every second of hover, up to 5× at 5 seconds, and its light grows with it. It keeps burning 3 seconds for every second of hover, 30 seconds at most, then goes out within 1 second and the normal cursor comes back. Its light shows the wall behind the page, colored orange or blue by the flame. Touch screens and reduced motion skip it.
+
+- **Timing and size:** `PER`, `MAX`, `OUT` and `GROW` at the top of the cursor part of `fire.js`.
+- **The wall:** a pattern of dots every 24 px with a crosshair every 120 px, in the flame's color. It is a small SVG tile inside `styles.css` (`--wall-tile` in `.wall__paper`), so there is nothing extra to download. It is fixed to the window and stays put while the light moves. To change the pattern, edit the tile: white is drawn, and its opacity sets how bright.
 
 ## Images
 
-- `assets/kevin-640.*` and `assets/kevin-1024.*`: the hero photo, with AVIF first and JPEG as the fallback.
-- `assets/kevin-mask.jpg`: a 256 px copy used as the light mask on the photo.
+- `assets/kevin-640.avif` and `assets/kevin-1024.avif`: the hero photo, cut out with a transparent background, so the wall behind the page shows around it.
+- `assets/kevin-640.jpg` and `assets/kevin-1024.jpg`: the fallback for browsers without AVIF, on the page color `#0e0e0d`.
+- `assets/kevin-mask.jpg`: a 256 px copy on pure black, used as the mask for the flames' light on the photo. It must be black wherever the photo is transparent, or the light shows a faint square.
 - `og.jpg`: the 1200×630 preview image for links shared on Slack, LinkedIn and X.
 
-To redo them from a new 1024 px source photo on macOS:
+To redo them on macOS from a new 1024 px photo, start with three PNGs: the cut-out with transparency (`cut.png`; Finder's "Remove Background" quick action does this), the cut-out on `#0e0e0d` (`on-bg.png`) and the cut-out on black (`on-black.png`).
 
 ```sh
-sips -s format avif -s formatOptions 50 src.jpg --out assets/kevin-1024.avif
-sips -Z 640 -s format avif -s formatOptions 50 src.jpg --out assets/kevin-640.avif
-sips -s format jpeg -s formatOptions 58 src.jpg --out assets/kevin-1024.jpg
-sips -Z 640 -s format jpeg -s formatOptions 60 src.jpg --out assets/kevin-640.jpg
-sips -Z 256 -s format jpeg -s formatOptions 55 src.jpg --out assets/kevin-mask.jpg
+sips -s format avif -s formatOptions 50 cut.png --out assets/kevin-1024.avif
+sips -Z 640 cut.png --out cut-640.png && sips -s format avif -s formatOptions 50 cut-640.png --out assets/kevin-640.avif
+sips -s format jpeg -s formatOptions 58 on-bg.png --out assets/kevin-1024.jpg
+sips -Z 640 -s format jpeg -s formatOptions 60 on-bg.png --out assets/kevin-640.jpg
+sips -Z 256 -s format jpeg -s formatOptions 55 on-black.png --out assets/kevin-mask.jpg
 ```
+
+Then move the flames onto the new palms with `--fire-x`, `--fire-y`, `--ice-x` and `--ice-y` at the top of the Stage section in `styles.css`.

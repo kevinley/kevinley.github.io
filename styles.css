@@ -91,7 +91,6 @@
   --gl-ice: 1.2 1.35 1.7 4 2 1;
 
   /* Atmosphere */
-  --halo: radial-gradient(ellipse 40vw 50vh at 85% 0%, rgba(233, 169, 127, .06), transparent 70%);
   --scrim: rgba(14, 14, 13, .78);
 
   /* Shape and rhythm */
@@ -129,22 +128,15 @@
    ========================================================= */
 *, *::before, *::after { box-sizing: border-box; }
 html { background: var(--bg); scroll-padding-top: calc(var(--bar-h) + 24px); }
+/* No background on body: the page color sits on html, so the wall behind the
+   page (Burning cursor) can show through between the sections. */
 body {
   margin: 0;
-  background: var(--bg);
   color: var(--ink);
   font: 400 var(--fs-body)/1.55 var(--sans);
   letter-spacing: -.01em;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-}
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: var(--halo);
-  pointer-events: none;
-  z-index: -1;
 }
 a { color: inherit; text-decoration: none; }
 p, h1, h2, h3, h4 { margin: 0; }
@@ -266,8 +258,8 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
    ========================================================= */
 .stage {
   /* Where the flames sit, as % of the stage: just above each palm in the photo. */
-  --fire-x: 20.5%; --fire-y: 67%;
-  --ice-x: 81%;    --ice-y: 67%;
+  --fire-x: 14.5%; --fire-y: 67%;
+  --ice-x: 85.5%;  --ice-y: 67%;
   --fire-a: .55; --ice-a: .55;
   --orb: calc(var(--stage) * .15);
   grid-area: stage;
@@ -282,8 +274,10 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   inset: 0;
   margin: 0;
   isolation: isolate;
-  -webkit-mask-image: linear-gradient(to bottom, var(--ink) 86%, transparent 100%);
-  mask-image: linear-gradient(to bottom, var(--ink) 86%, transparent 100%);
+  /* The photo is a cut-out (transparent AVIF), so the wall shows around it.
+     Only the hoodie, cut off at the bottom, fades out. */
+  -webkit-mask-image: linear-gradient(to bottom, var(--ink) 86%, transparent);
+  mask-image: linear-gradient(to bottom, var(--ink) 86%, transparent);
 }
 .portrait__img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .portrait::before,
@@ -390,6 +384,66 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   left: -200%; top: -350%;
   width: 500%; height: 600%;
   pointer-events: none;
+}
+
+/* =========================================================
+   Burning cursor — built by fire.js on mouse devices only. After a hover on a
+   flame the pointer keeps burning, and its light shows the wall behind the page.
+   ========================================================= */
+/* While it burns, the flame is the cursor: its core sits on the click point. */
+html.is-burning, html.is-burning * { cursor: none !important; }
+.cursor-fire {
+  position: fixed;
+  left: 0; top: 0;
+  z-index: 40;
+  /* The .orb__gl frame (10 × 12 ball-radii) with a 12 px ball, centered on the click point. */
+  width: 120px; height: 144px;
+  margin: -96px 0 0 -60px;
+  transform-origin: 50% 66.667%;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* The light: a circle that follows the pointer, behind every section and in
+   front of the page color. Its paper moves the other way, so the wall stays put. */
+.wall {
+  --wall-r: clamp(160px, 16vw, 260px);
+  --light: var(--fire-ink);
+  --light-glow: var(--fire-glow);
+  position: fixed;
+  left: 0; top: 0;
+  z-index: -1;
+  width: calc(var(--wall-r) * 2); height: calc(var(--wall-r) * 2);
+  margin: calc(var(--wall-r) * -1) 0 0 calc(var(--wall-r) * -1);
+  -webkit-mask-image: radial-gradient(closest-side, var(--ink) 20%, transparent);
+  mask-image: radial-gradient(closest-side, var(--ink) 20%, transparent);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.wall[data-flame="ice"] { --light: var(--ice-ink); --light-glow: var(--ice-glow); }
+/* A soft glow of the flame's color on top of what it lights. */
+.wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--light-glow) 45%, transparent), transparent);
+  mix-blend-mode: screen;
+}
+/* The wall: a pattern in the flame's color, fixed to the window. It moves
+   against the light, so it stays put. The pattern is a 120 px SVG tile used as
+   a mask: dots every 24 px with a crosshair every 120 px. To change it, edit
+   the tile (white = drawn, its opacity = how bright). */
+.wall__paper {
+  --wall-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cdefs%3E%3Cpattern id='d' width='24' height='24' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='12' cy='12' r='1.3' fill='white' fill-opacity='.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='120' height='120' fill='url(%23d)'/%3E%3Cpath d='M53 60h14M60 53v14' stroke='white' stroke-width='1.5' stroke-opacity='.9'/%3E%3C/svg%3E");
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 100vw; height: 100vh;
+  transform-origin: 0 0;
+  background: var(--light);
+  -webkit-mask: var(--wall-tile) 0 0 / 120px 120px;
+  mask: var(--wall-tile) 0 0 / 120px 120px;
+  will-change: transform;
 }
 
 /* =========================================================
@@ -562,9 +616,10 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
 
 /* =========================================================
    Self-check — ten boxes, then one result bar under them. A CSS counter
-   shows how many are left unticked; the script adds the "?" before the
-   first tick, shows only the line for your score, and puts the answers
-   into the email. Without the script, all three lines show.
+   shows how many are left unticked ("reasons to improve", starting at 10);
+   the script takes over the count, shows only the line for your score after
+   the first tick, and puts the answers into the email. Without the script,
+   all three lines show.
    ========================================================= */
 .check {
   counter-reset: open;
