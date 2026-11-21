@@ -21,6 +21,7 @@ The site is live about a minute later. `.nojekyll` tells Pages to serve the file
 | English | https://kevinley.github.io/ | `index.html` |
 | German | https://kevinley.github.io/de/ | `de/index.html` |
 | French | https://kevinley.github.io/fr/ | `fr/index.html` |
+| Privacy notice | https://kevinley.github.io/privacy/, /de/datenschutz/, /fr/confidentialite/ | `privacy/index.html`, `de/datenschutz/index.html`, `fr/confidentialite/index.html` |
 
 - **Tone:** the German page says "du", the French page says "vous".
 - **One file per language:** each page is a full translation with the same markup. All three share `styles.css`, `script.js`, `fire.js`, the fonts and the photos.
@@ -34,7 +35,7 @@ The site is live about a minute later. `.nojekyll` tells Pages to serve the file
 
 Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 
-- **Booking link:** commented out in the contact section until it exists.
+- **Booking link:** commented out in the contact section until it exists. When it goes in, add the booking tool to the three privacy pages.
 - **Quote:** commented out under "Who's looking at your app" until there is a real one.
 - **security.txt:** renew `Expires` in `.well-known/security.txt` before 21 Nov 2027.
 
@@ -43,6 +44,7 @@ Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 - **Email:** `swiftysenpai@icloud.com`. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD, and it is the contact in `.well-known/security.txt`. To change it, replace it everywhere at once.
 - **Email draft:** all three mail buttons open the same draft. Its text lives in `<template id="mail-draft">` on each page, so you can edit it there. The script puts the self-check count where `{count}` is.
 - **Legal notice:** the last line of the footer on each page (name, legal form, address, VAT, RCS and business permit numbers), and the VAT number in the JSON-LD. The JSON-LD and `llms.txt` only give the country, on purpose: the full address is only in the visible legal notice. If a detail changes, change it everywhere.
+- **Privacy notice (GDPR):** one page per language, linked from every footer. It says what the site and the email contact do with personal data: GitHub Pages logs visitors' IP addresses, and the mailbox is iCloud Mail. **Before the site uses anything new** (the booking tool, analytics, a contact form, fonts or scripts from another site), add it to all three privacy pages and change their date. If an email to you, a mailbox move or a new tool changes what happens to people's data, change it there too.
 - **Profiles:** the `Person` in the JSON-LD links to LinkedIn and GitHub (`sameAs`), so search engines and AI tools tie them to you. Add more profiles there.
 
 ## Moving to your own domain

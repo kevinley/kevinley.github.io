@@ -27,6 +27,7 @@ The site is one page, in English, German and French. The same content is on all 
 ## Who he is
 
 - Kevin Ley, Software Craftsman: a sole proprietor in Luxembourg (VAT LU34713030, RCS Luxembourg A47364).
+- [Privacy notice](https://kevinley.github.io/privacy/): no cookies, no analytics, no tracking; the host (GitHub Pages) logs visitors' IP addresses for security.
 - Profiles: [LinkedIn](https://www.linkedin.com/in/kevinley/), [GitHub](https://github.com/kevinley)
 - [Who's looking at your app](https://kevinley.github.io/#why): building for the web since 2008, with deep experience across many SaaS apps and mobile apps.
 - He wrote the code review rules his team follows, set up its first automated tests that use the app the way a customer does, and set up the AI coding tools for the whole team.
