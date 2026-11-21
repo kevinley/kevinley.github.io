@@ -47,7 +47,7 @@
   /* Ink */
   --ink: #f2efe9;
   --ink-2: rgba(242, 239, 233, .62);
-  --ink-3: rgba(242, 239, 233, .48);
+  --ink-3: rgba(242, 239, 233, .5); /* .5 keeps small text at 4.5:1 on --bg */
   --ink-4: rgba(242, 239, 233, .20);
 
   /* Lines */
@@ -292,7 +292,6 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   inset: 0;
   mix-blend-mode: overlay;
   pointer-events: none;
-  transition: opacity .5s var(--ease);
   /* Light only lands where the photo is lit (hands, face), never beside it.
      The 7 KB mask is white, with alpha = how bright the photo is there
      (tools/light-mask.swift). A plain alpha mask with a -webkit- copy: Safari
@@ -302,9 +301,16 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
 }
 .portrait::before { background: radial-gradient(circle at var(--fire-x) var(--fire-y), var(--fire-light) 0%, color-mix(in srgb, var(--fire-light) 72%, transparent) 11%, color-mix(in srgb, var(--fire-light) 44%, transparent) 22%, color-mix(in srgb, var(--fire-light) 22%, transparent) 33%, color-mix(in srgb, var(--fire-light) 9%, transparent) 45%, color-mix(in srgb, var(--fire-light) 3%, transparent) 53%, transparent 62%); opacity: var(--fire-a); }
 .portrait::after  { background: radial-gradient(circle at var(--ice-x) var(--ice-y), var(--ice-light) 0%, color-mix(in srgb, var(--ice-light) 72%, transparent) 11%, color-mix(in srgb, var(--ice-light) 44%, transparent) 22%, color-mix(in srgb, var(--ice-light) 22%, transparent) 33%, color-mix(in srgb, var(--ice-light) 9%, transparent) 45%, color-mix(in srgb, var(--ice-light) 3%, transparent) 53%, transparent 62%); opacity: var(--ice-a); }
-.js .portrait::before { animation: flicker 2.6s ease-in-out infinite; }
-.js .portrait::after  { animation: flicker 3.1s ease-in-out infinite reverse; }
-@keyframes flicker { 0%, 100% { filter: brightness(1); } 40% { filter: brightness(1.18); } 70% { filter: brightness(.9); } }
+/* The flicker animates opacity, which the browser can blend without redrawing
+   the masked light every frame (a brightness filter made it redraw). The light
+   strengths are registered so hovering a flame still fades them. */
+@property --fire-a { syntax: "<number>"; inherits: true; initial-value: .55; }
+@property --ice-a { syntax: "<number>"; inherits: true; initial-value: .55; }
+.stage { transition: --fire-a .5s var(--ease), --ice-a .5s var(--ease); }
+.js .portrait::before { animation: flicker-fire 2.6s ease-in-out infinite; }
+.js .portrait::after  { animation: flicker-ice 3.1s ease-in-out infinite reverse; }
+@keyframes flicker-fire { 0%, 100% { opacity: var(--fire-a); } 40% { opacity: calc(var(--fire-a) * 1.18); } 70% { opacity: calc(var(--fire-a) * .9); } }
+@keyframes flicker-ice { 0%, 100% { opacity: var(--ice-a); } 40% { opacity: calc(var(--ice-a) * 1.18); } 70% { opacity: calc(var(--ice-a) * .9); } }
 .stage:has(.flame--fire:hover, .flame--fire .is-open) { --fire-a: 1; --ice-a: .3; }
 .stage:has(.flame--ice:hover, .flame--ice .is-open) { --ice-a: 1; --fire-a: .3; }
 
@@ -376,22 +382,32 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
 .orb:hover .orb__fire::before,
 .orb.is-open .orb__fire::before { opacity: 1; transform: scale(1.25); }
 
-/* WebGL fire: the canvas is black where there is no flame; screen blending
-   turns black transparent so only the light lands on the photo. */
-.orb.has-gl { mix-blend-mode: screen; }
+/* WebGL fire: the canvas is see-through where there is no flame (its alpha is
+   the flame's brightness), so it needs no blend mode, which keeps it cheap. */
 .orb.has-gl .orb__fire b,
 .orb.has-gl .orb__fire i,
 .orb.has-gl .orb__fire::before { display: none; }
+/* With JS the CSS fireball waits, so the WebGL fire appears in its place
+   without a swap. It shows when fire.js finds no fast WebGL (.no-gl), and
+   after 2.5 s in any case, in case fire.js never arrives. */
+.js .stage:not(.no-gl) .orb:not(.has-gl) .orb__fire { opacity: 0; animation: orb-late 0s 2.5s forwards; }
+@keyframes orb-late { to { opacity: 1; } }
 .orb.has-gl:hover .orb__fire,
 .orb.has-gl.is-open .orb__fire,
 .orb.has-gl:focus-visible .orb__fire { transform: none; }
-.orb__gl {
+/* Both WebGL flames share one canvas: from 5 ball-radii left of the fire's
+   core to 5 right of the ice's, and from 8 radii above the cores to 4 below. */
+.stage__gl {
   position: absolute;
-  /* 10 ball-radii wide, 12 tall; the ball sits 4 radii above the bottom edge. */
-  left: -200%; top: -350%;
-  width: 500%; height: 600%;
+  z-index: 3;
+  left: calc(var(--fire-x) - 2.5 * var(--orb));
+  width: calc(var(--ice-x) - var(--fire-x) + 5 * var(--orb));
+  top: calc(var(--fire-y) - 4 * var(--orb));
+  height: calc(6 * var(--orb));
   pointer-events: none;
 }
+@media (prefers-reduced-motion: no-preference) { .stage__gl { animation: ignite .3s var(--ease) both; } }
+@keyframes ignite { from { opacity: 0; } }
 
 /* =========================================================
    Burning cursor — built by fire.js on mouse devices only. After a hover on a
@@ -403,7 +419,7 @@ html.is-burning, html.is-burning * { cursor: none !important; }
   position: fixed;
   left: 0; top: 0;
   z-index: 40;
-  /* The .orb__gl frame (10 × 12 ball-radii) with a 12 px ball, centered on the click point. */
+  /* A flame frame (10 × 12 ball-radii) with a 12 px ball, centered on the click point. */
   width: 120px; height: 144px;
   margin: -96px 0 0 -60px;
   transform-origin: 50% 66.667%;
@@ -1017,6 +1033,7 @@ html.is-burning, html.is-burning * { cursor: none !important; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js [data-reveal] { opacity: 1; transform: none; }
+  .js .stage:not(.no-gl) .orb:not(.has-gl) .orb__fire { opacity: 1; } /* its 2.5 s fallback is an animation */
   .btn:hover, .mail:hover, .btn:hover .btn__arrow, .mail:hover .mail__arrow { transform: none; }
   html { scroll-behavior: auto; }
 }

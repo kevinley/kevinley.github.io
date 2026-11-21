@@ -12,6 +12,8 @@ git add -A && git commit -m "Update site" && git push
 
 The site is live about a minute later. `.nojekyll` tells Pages to serve the files as they are, without running Jekyll.
 
+**When you change `styles.css`, `script.js` or `fire.js`, raise the `?v=` number** on the `styles.css`, `script.js` and `fire.js` links in `index.html`, `de/index.html`, `fr/index.html` (and `styles.css` in `404.html`). GitHub Pages lets browsers keep files for 10 minutes, so without a new number a returning visitor can get the new page with the old CSS or script.
+
 ## Languages
 
 | Page | Address | File |
@@ -48,13 +50,26 @@ Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 
 | | Budget (gzip) | Now |
 |---|---|---|
-| HTML | 15 KB | 8.0 KB (English), 8.9 KB (German), 8.8 KB (French) |
-| CSS | 14 KB | 10.2 KB |
-| JS the page needs | 4 KB | 2.2 KB (`script.js`) |
-| JS for the effects | – | 4.1 KB (`fire.js`, fetched after the page has loaded) |
+| HTML | 15 KB | 8.0 KB (English), 9.0 KB (German), 8.8 KB (French) |
+| CSS | 14 KB | 10.6 KB |
+| JS the page needs | 4 KB | 2.1 KB (`script.js`) |
+| JS for the effects | – | 5.8 KB (`fire.js`, deferred, never blocks the first paint) |
 | Font files | 2 | 2 (Inter Tight latin, regular + italic, 69 KB) |
 
-A first visit is about 113 KB on phones and 121 KB on laptops, in 8 requests, all from the same host. The photo ships as a transparent AVIF (13 KB on phones, 21 KB on laptops), with a JPEG fallback. `script.js` fetches `fire.js` (the WebGL flames and the burning cursor) only once the page has loaded and the browser is idle, so the effects never slow down the first paint.
+A first visit is about 115 KB on phones and 123 KB on laptops, in 8 requests, all from the same host. The photo ships as a transparent AVIF (13 KB on phones, 21 KB on laptops), with a JPEG fallback.
+
+**Lighthouse (local runs, 21 Nov 2026):** Accessibility, Best Practices and SEO 100 on every page. Performance on mobile: 99 without a graphics chip (simulated with `--disable-gpu`; test servers like PageSpeed Insights' usually have none, so the page shows the CSS fireballs), and 83 to 99 with a graphics chip, varying from run to run, mostly 96 to 99, because creating the WebGL context takes 10 to 130 ms. Desktop: 100. Before these changes the live site scored 38 on mobile.
+
+How the flames stay cheap (all in `fire.js`):
+
+- **Loaded with the page:** `fire.js` is a deferred script, so the fire is there in the first frames. Until it is ready, the CSS fireballs stay hidden, so there is no swap from circles to fire. They show if WebGL is missing or slow (`.no-gl`), or after 2.5 s if `fire.js` never arrives.
+- **No software WebGL:** on machines where WebGL would run on the CPU, the browser refuses the context (`failIfMajorPerformanceCaveat`) and the CSS fireballs show. That fire used to block the page for seconds there.
+- **One canvas, one context for both flames:** each flame draws in its own half. A WebGL context is slow to create, so the cursor gets its own only when a mouse first enters the photo.
+- **Shader compiled off the main thread** (`KHR_parallel_shader_compile`).
+- **Work only where the flame is:** the shader skips the noise outside the flame's reach and the sparks outside their column. That is the same picture for about a third of the GPU work.
+- **Lower resolution on slow chips:** if the flames run under 50 frames per second after the page has loaded, they draw at 60% resolution from then on.
+- **The light on the photo flickers with opacity,** which the browser blends without redrawing. A brightness filter made it redraw the masked light every frame.
+- **Paused** when the photo is off screen or the tab is in the background.
 
 ## Burning cursor
 

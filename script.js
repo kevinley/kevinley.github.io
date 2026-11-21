@@ -1,10 +1,9 @@
 /* Progressive enhancement only: the page is complete without this file.
    Reveal, step lines, self-check result + email, copy address, flame buttons.
-   The WebGL fire and the burning cursor load later, from fire.js.
+   The WebGL fire and the burning cursor live in fire.js.
    Every word it writes comes from data-* attributes in the page, so the
    English, German and French pages share this one file. */
 (() => {
-  const me = document.currentScript; // to find fire.js next to it, from /de/ and /fr/ too
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -28,18 +27,24 @@
   const rails = $$("[data-rail]");
   if (!reduce && rails.length) {
     let ticking = false;
+    const set = (r, box, h) => {
+      const p = Math.min(Math.max((h * 0.6 - box.top) / box.height, 0), 1);
+      r.style.setProperty("--progress", (p * 100).toFixed(1) + "%");
+    };
     const update = () => {
       ticking = false;
-      rails.forEach((r) => {
-        const box = r.getBoundingClientRect();
-        const p = Math.min(Math.max((innerHeight * 0.6 - box.top) / box.height, 0), 1);
-        r.style.setProperty("--progress", (p * 100).toFixed(1) + "%");
-      });
+      rails.forEach((r) => set(r, r.getBoundingClientRect(), innerHeight));
     };
     addEventListener("scroll", () => {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
     }, { passive: true });
-    update();
+    // The first pass comes from an observer, which hands over each box without
+    // making the browser lay out the page early.
+    const first = new IntersectionObserver((es) => {
+      es.forEach((e) => set(e.target, e.boundingClientRect, e.rootBounds ? e.rootBounds.height : innerHeight));
+      first.disconnect();
+    });
+    rails.forEach((r) => first.observe(r));
   }
 
   /* ---- Mail buttons open the #mail-draft template, count filled in.
@@ -114,13 +119,4 @@
   });
   addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
   addEventListener("pointerdown", (e) => { if (!e.target.closest(".orb, .skills")) close(); });
-
-  /* ---- WebGL fire and the burning cursor live in fire.js, fetched once the
-     page has loaded and the browser is idle. Without it the CSS fireballs stay. ---- */
-  if (orbs.length) {
-    const idle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-    const fire = () => document.head.append(Object.assign(document.createElement("script"), { src: new URL("fire.js", me.src).href }));
-    const later = () => idle(fire, { timeout: 1500 });
-    if (document.readyState === "complete") later(); else addEventListener("load", later, { once: true });
-  }
 })();
