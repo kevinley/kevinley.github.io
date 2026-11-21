@@ -186,15 +186,66 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
        every second of hover (30 s at most), then goes out within 1 s and the
        normal cursor comes back. Its light shows the wall behind the page. Mouse only. ---- */
     const PER = 3, MAX = 30000, OUT = 1000, GROW = 5;
+    /* Easter eggs on the wall: what the orange flame shows broken, the blue
+       flame shows fixed, in the same spot. Each sits in the empty band above a
+       section: [which section, 0 = left / 1 = right, broken, fixed]. */
+    const EGGS = [
+      [0, 0, "// TODO: fix before launch", "// fixed before launch"],
+      [1, 1, 'const key = "sk_live_…"', "const key = env.STRIPE_KEY"],
+      [2, 0, "500 Internal Server Error", "200 OK"],
+      [2, 1, '"it works on my machine"', '"it works on every machine"'],
+      [3, 1, "WHERE id = ${input}", "WHERE id = $1"],
+      [4, 0, "if (user.isAdmin || true)", "if (user.isAdmin)"],
+      [5, 1, "catch (e) {}", "catch (e) { report(e) }"],
+      [6, 0, "Tests: 0 passed", "Tests: 142 passed"],
+    ];
+    const ICON = {
+      bug: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><ellipse cx="8" cy="9.5" rx="3.4" ry="4.4"/><path d="M8 5.5v8.5M6.2 5 4.8 3.2M9.8 5l1.4-1.8M4.6 8H2.2M4.8 11.2l-2 1.4M11.4 8h2.4M11.2 11.2l2 1.4"/></svg>',
+      fix: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.8 8.6 6.4 12 13.2 4.4"/></svg>',
+    };
     const cursor = (c) => {
       const wall = document.createElement("div");
       const paper = document.createElement("div");
+      const eggs = document.createElement("div");
       wall.className = "wall";
       paper.className = "wall__paper";
+      eggs.className = "wall__eggs";
       c.cv.className = "cursor-fire";
       wall.setAttribute("aria-hidden", "true");
       c.cv.setAttribute("aria-hidden", "true");
-      wall.append(paper);
+      const egg = EGGS.map(([, side, broken, fixed]) => {
+        const el = document.createElement("div");
+        el.className = side ? "egg egg--end" : "egg";
+        [["bug", broken], ["fix", fixed]].forEach(([k, text]) => {
+          const face = document.createElement("span");
+          face.className = "egg__" + k;
+          face.innerHTML = ICON[k];
+          face.append(text);
+          el.append(face);
+        });
+        return eggs.appendChild(el);
+      });
+      // Put each egg in the middle of the band above its section, at the
+      // column's left or right edge. Again whenever the page changes size.
+      const place = () => {
+        const secs = document.querySelectorAll("main > .section, main > .contact");
+        const col = document.querySelector("main .wrap");
+        if (!col) return;
+        const r = col.getBoundingClientRect(), cs = getComputedStyle(col);
+        const left = r.left + parseFloat(cs.paddingLeft);
+        const width = r.width - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        EGGS.forEach(([s, side], i) => {
+          const sec = secs[s];
+          egg[i].hidden = !sec;
+          if (!sec) return;
+          const pad = parseFloat(getComputedStyle(sec).paddingTop);
+          egg[i].style.left = `${left + side * width}px`;
+          egg[i].style.top = `${sec.getBoundingClientRect().top + scrollY + pad * 0.45}px`;
+        });
+      };
+      place();
+      new ResizeObserver(place).observe(document.body);
+      wall.append(paper, eggs);
       document.body.append(wall, c.cv);
       const cf = { heat: 0, time: 2, ramp: fires[0].ramp };
       const fitc = (w, h, max) => { c.size(w, h, max); cf.cx = c.cv.width / 2; cf.cy = c.cv.height / 3; cf.unit = c.cv.width / 10; };
@@ -255,6 +306,8 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         const k = 1 + (m - 1) * 0.3, ly = y - 6 * m;
         wall.style.transform = `translate3d(${x}px,${ly}px,0) scale(${k.toFixed(3)})`;
         paper.style.transform = `scale(${(1 / k).toFixed(4)}) translate3d(${-x}px,${-ly}px,0)`;
+        // The eggs scroll with the page; the paper stays with the window.
+        eggs.style.transform = `scale(${(1 / k).toFixed(4)}) translate3d(${-x}px,${-ly - scrollY}px,0)`;
         wall.style.opacity = on * a * (0.88 + 0.07 * Math.sin(t * 13) + 0.05 * Math.sin(t * 29 + 1));
         return true;
       };

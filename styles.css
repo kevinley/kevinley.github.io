@@ -453,12 +453,12 @@ html.is-burning, html.is-burning * { cursor: none !important; }
   background: radial-gradient(closest-side, color-mix(in srgb, var(--light-glow) 45%, transparent), transparent);
   mix-blend-mode: screen;
 }
-/* The wall: a pattern in the flame's color, fixed to the window. It moves
-   against the light, so it stays put. The pattern is a 120 px SVG tile used as
-   a mask: dots every 24 px with a crosshair every 120 px. To change it, edit
-   the tile (white = drawn, its opacity = how bright). */
+/* The wall: a blueprint grid in the flame's color, fixed to the window. It
+   moves against the light, so it stays put. The pattern is a 120 px SVG tile
+   used as a mask: fine lines every 24 px, a stronger line and a cross every
+   120 px. To change it, edit the tile (white = drawn, its opacity = how bright). */
 .wall__paper {
-  --wall-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cdefs%3E%3Cpattern id='d' width='24' height='24' patternUnits='userSpaceOnUse'%3E%3Ccircle cx='12' cy='12' r='1.3' fill='white' fill-opacity='.5'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='120' height='120' fill='url(%23d)'/%3E%3Cpath d='M53 60h14M60 53v14' stroke='white' stroke-width='1.5' stroke-opacity='.9'/%3E%3C/svg%3E");
+  --wall-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M12.5 0V120M0 12.5H120M36.5 0V120M0 36.5H120M84.5 0V120M0 84.5H120M108.5 0V120M0 108.5H120' stroke='white' stroke-opacity='.17'/%3E%3Cpath d='M60 0V120M0 60H120' stroke='white' stroke-opacity='.42' stroke-width='1.5'/%3E%3Cpath d='M54 60h12M60 54v12' stroke='white' stroke-opacity='.9' stroke-width='1.5'/%3E%3C/svg%3E");
   position: absolute;
   left: 50%; top: 50%;
   width: 100vw; height: 100vh;
@@ -468,6 +468,18 @@ html.is-burning, html.is-burning * { cursor: none !important; }
   mask: var(--wall-tile) 0 0 / 120px 120px;
   will-change: transform;
 }
+
+/* Easter eggs: bits of code drawn on the wall, in the empty band above each
+   section. The orange flame shows them broken, the blue flame fixed. They
+   scroll with the page (fire.js places them; the list is EGGS there). */
+.wall__eggs { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-origin: 0 0; color: var(--light); }
+.egg { position: absolute; display: grid; translate: -10px -50%; font: 400 14px/1 var(--mono); letter-spacing: -.01em; white-space: nowrap; }
+.egg--end { translate: calc(10px - 100%) -50%; } /* the label's padding hangs outside the column, so the text lines up with it */
+/* Each sits on a label in the page color, so no grid line runs through it. */
+.egg > span { grid-area: 1 / 1; display: flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 4px; background: var(--bg); }
+.egg--end > span { justify-self: end; }
+.egg svg { width: 15px; height: 15px; flex: none; }
+.wall[data-flame="ice"] .egg__bug, .wall:not([data-flame="ice"]) .egg__fix { visibility: hidden; }
 
 /* =========================================================
    Skills — plain lines fly out of the flame like sparks
