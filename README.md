@@ -30,17 +30,20 @@ The site is live about a minute later. `.nojekyll` tells Pages to serve the file
 - **404:** `404.html` shows its message in German or French when the missing address starts with `/de/` or `/fr/`.
 - **German and French typography:** prices are written `3.600 €` (German) and `3 600 €` (French). The French page puts a narrow non-breaking space before `?`, `!` and `;` (`&#8239;`) and a non-breaking space before `:` (`&nbsp;`). Keep these when you edit.
 
-## Before going live
+## Still to do
 
-Still to do. Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
+Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
+
+- **Booking link:** commented out in the contact section until it exists.
+- **Quote:** commented out under "Who's looking at your app" until there is a real one.
+- **security.txt:** renew `Expires` in `.well-known/security.txt` before 21 Nov 2027.
+
+## Contact and business details
 
 - **Email:** `swiftysenpai@icloud.com`. On each of the three pages it appears in the hero button, the self-check button, the contact button and the JSON-LD, and it is the contact in `.well-known/security.txt`. To change it, replace it everywhere at once.
 - **Email draft:** all three mail buttons open the same draft. Its text lives in `<template id="mail-draft">` on each page, so you can edit it there. The script puts the self-check count where `{count}` is.
-- **Booking link:** commented out in the contact section until it exists.
-- **Quote:** commented out under "Who's looking at your app" until there is a real one.
-- **Legal notice:** business name, address and VAT number in the footer.
+- **Legal notice:** the last line of the footer on each page (name, legal form, address, VAT, RCS and business permit numbers), and the VAT number in the JSON-LD. The JSON-LD and `llms.txt` only give the country, on purpose: the full address is only in the visible legal notice. If a detail changes, change it everywhere.
 - **Profiles:** the `Person` in the JSON-LD links to LinkedIn and GitHub (`sameAs`), so search engines and AI tools tie them to you. Add more profiles there.
-- **security.txt:** renew `Expires` in `.well-known/security.txt` before 21 Nov 2027.
 
 ## Moving to your own domain
 

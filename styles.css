@@ -1022,6 +1022,15 @@ html.is-burning, html.is-burning * { cursor: none !important; }
 .foot__lang { display: flex; gap: 14px; }
 .foot__lang a { color: var(--ink-3); transition: color .3s var(--ease); }
 .foot__lang a:hover, .foot__lang [aria-current] { color: var(--ink); }
+/* Legal notice: its own line under the rest. Each part stays together, with
+   its dot, and the line breaks between parts. Phones: one part per line. */
+.foot__legal { flex-basis: 100%; font-style: normal; color: var(--ink-3); }
+.foot__legal span { display: inline-block; }
+.foot__legal span:not(:last-child)::after { content: " ·"; content: " ·" / ""; }
+@media (max-width: 600px) {
+  .foot__legal span { display: block; }
+  .foot__legal span::after { display: none; }
+}
 
 /* =========================================================
    Reveal + reduced motion
