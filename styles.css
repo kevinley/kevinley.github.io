@@ -333,6 +333,10 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   color: inherit;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  /* Holding a flame lights the burning cursor (fire.js), not a menu or a selection. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 .orb__fire { position: absolute; inset: 0; transition: transform .6s var(--ease-pop); }
 .orb__fire::before {
@@ -418,12 +422,23 @@ em { font-style: italic; font-weight: 500; color: var(--accent); }
   animation: blast .7s cubic-bezier(.15, .7, .3, 1) forwards;
 }
 @keyframes blast { from { transform: scale(.4); opacity: 1; } to { transform: scale(4.5); opacity: 0; } }
+/* The puff of smoke that rises where a doused flame goes out (the X key
+   secret in fire.js). */
+.blast--smoke {
+  border: 0;
+  box-shadow: none;
+  background: radial-gradient(circle, rgb(190 190 185 / .45), rgb(190 190 185 / .15) 45%, transparent 70%);
+  filter: blur(4px);
+  animation: smoke 1.2s cubic-bezier(.2, .6, .3, 1) forwards;
+}
+@keyframes smoke { from { transform: translateY(0) scale(.5); opacity: .9; } to { transform: translateY(-160%) scale(2.6); opacity: 0; } }
 @media (prefers-reduced-motion: no-preference) { .stage__gl { animation: ignite .3s var(--ease) both; } }
 @keyframes ignite { from { opacity: 0; } }
 
 /* =========================================================
-   Burning cursor — built by fire.js on mouse devices only. After a hover on a
-   flame the pointer keeps burning, and its light shows the wall behind the page.
+   Burning cursor — built by fire.js. After a hover on a flame (or holding one
+   on a touch screen) the pointer keeps burning, and its light shows the wall
+   behind the page.
    ========================================================= */
 /* While it burns, the flame is the cursor: its core sits on the click point. */
 html.is-burning, html.is-burning * { cursor: none !important; }

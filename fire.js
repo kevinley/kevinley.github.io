@@ -187,6 +187,7 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         if (frames === 90 && slow / 60 > 20) { q = 0.6; fit(); }
       }
       if (intro) drop(now);
+      if (fizz) fizzle(now);
       if (onStage) {
         fires.forEach((f) => {
           const hot = f.orb.matches(":hover") || f.orb.classList.contains("is-open") ? 1 : 0;
@@ -258,7 +259,7 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         intro = null;
         landed = true;
         cv.style.height = cv.style.transform = "";
-        if (then) then();
+        if (then) then(); else relight();
       }
     };
     const begin = () => {
@@ -276,7 +277,9 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       intro = { at: 0 };
       wake();
     };
-    const watch = () => {
+    // again: after a douse, the mouse has to come back onto the photo, even
+    // if it is already on it.
+    const watch = (again) => {
       let seen = false, near = !mouse, done = false;
       const go = () => {
         if (done || !seen || !near) return;
@@ -293,17 +296,77 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       if (mouse) {
         stage.addEventListener("pointerenter", enter);
         stage.addEventListener("focusin", enter);
-        near = stage.matches(":hover"); // already on the photo when the page finished loading
+        near = !again && stage.matches(":hover"); // already on the photo when the page finished loading
       }
     };
-    if (document.readyState === "complete") watch(); else addEventListener("load", watch, { once: true });
+    if (document.readyState === "complete") watch(); else addEventListener("load", () => watch(), { once: true });
+
+    /* ---- Douse, a secret: press X anywhere on the page (not in a form
+       field) and both flames go out. Each flares once, sputters and shrinks
+       into a thin wisp, a puff of smoke rises (.blast--smoke in styles.css),
+       the light on the hands fades and a burning cursor goes out too. Then
+       the hands wait empty, and the flames drop in again the next time the
+       mouse enters the photo (without a mouse: right away). ---- */
+    const KEY = "x", FIZZ = 0.7; // seconds
+    let fizz = null, quench = null; // quench: puts out the cursor, once it exists
+    const douse = () => {
+      if (!landed || intro || fizz) return;
+      landed = false;
+      fizz = { at: 0 };
+      if (quench) quench();
+      fires.forEach((f) => {
+        f.landed = false;
+        const puff = document.createElement("span");
+        puff.className = "blast blast--smoke";
+        puff.addEventListener("animationend", () => puff.remove());
+        f.orb.append(puff);
+      });
+      stage.style.setProperty("--fire-a", "0");
+      stage.style.setProperty("--ice-a", "0");
+      wake();
+    };
+    const fizzle = (now) => {
+      if (!fizz.at) fizz.at = now;
+      const k = Math.min((now - fizz.at) / 1000 / FIZZ, 1);
+      fires.forEach((f) => {
+        const flare = 1 + 0.3 * Math.sin(Math.min(k * 5, 1) * Math.PI);
+        const sputter = 1 + 0.12 * Math.sin(k * 55 + (f.ice ? 2 : 0));
+        f.grow = Math.max(0.02, flare * sputter * (1 - k) ** 1.6);
+        f.stretch = 1 + 2.2 * k;
+      });
+      if (k < 1) return;
+      fizz = null;
+      fires.forEach((f) => { f.dy = 1e5; f.grow = f.stretch = undefined; });
+      watch(true);
+    };
+    addEventListener("keydown", (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+      if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+      if (e.key.toLowerCase() === KEY) douse();
+    });
+    // Back in the hands with the mouse already on a flame: light the cursor
+    // as if the mouse had just arrived.
+    // Mouse only: a touched flame stays :hover on phones, and would light up.
+    const relight = () => mouse && fires.forEach((f) => {
+      if (f.orb.matches(":hover")) f.orb.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" }));
+    });
 
     /* ---- Burning cursor. Hover a flame and the cursor turns into a flame of
        that color, fully alight after 1 s; its core is where clicks land. It then
        grows with every second of hover, up to 5× at 5 s. It keeps burning 3 s for
        every second of hover (30 s at most), then goes out within 1 s and the
-       normal cursor comes back. Its light shows the wall behind the page. Mouse only. ---- */
+       normal cursor comes back. Its light shows the wall behind the page. On
+       touch screens, holding a flame does the same with the finger (see Tap
+       and hold). ---- */
     const PER = 3, MAX = 30000, OUT = 1000, GROW = 5;
+    // Touch: how far above the finger the flame burns (px), so the finger
+    // doesn't hide it, and how big it may grow on a small screen.
+    const LIFT = 60, GROW_TOUCH = 3;
+    // Touch only: the strips at the bottom and top that scroll while a finger
+    // holds the flame there: their height (px, at most a quarter of the
+    // window) and the speed at the window's edge (px/s), from 0 at the
+    // strip's inner edge.
+    const EDGE = 170, CRAWL = 260;
     /* Easter eggs on the wall: what the orange flame shows broken, the blue
        flame shows fixed, in the same spot. Most hide around the flames, a few
        further down. [where, broken, fixed]; where = spot + "-l" or "-r" (the
@@ -398,7 +461,9 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
 
       const root = document.documentElement;
       let x = 0, y = 0, px = 0, v = 0, lean = 0, away = false, hidden = false;
-      let from = 0, a = 0, held = 0, until = 0, m = 1, grown = 1, res = 1;
+      let from = 0, a = 0, held = 0, until = 0, m = 1, grown = 1, res = 1, sv = 0, sy = 0;
+      // touch: lit by a finger; down: the finger is still on the screen; fy: the finger's height.
+      let touch = false, down = false, fy = 0;
       // Hide the normal cursor only while the flame is big enough to aim with.
       const hide = (on) => { if (on !== hidden) root.classList.toggle("is-burning", (hidden = on)); };
       addEventListener("pointermove", (e) => {
@@ -406,23 +471,63 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       }, { passive: true });
       document.addEventListener("mouseout", (e) => { if (!e.relatedTarget) away = true; });
 
+      // Catch flame f, or let it go and let it burn down.
+      const light = (f) => {
+        from = performance.now();
+        held = a; grown = m; // a cursor that is still burning carries on from where it is
+        cf.ramp = f.ramp;
+        wall.dataset.flame = f.ice ? "ice" : "fire";
+        wake();
+      };
+      const unlight = () => {
+        if (!from) return;
+        const now = performance.now();
+        until = Math.max(until, now + Math.min((now - from) * PER, MAX));
+        held = a; grown = m;
+        from = 0;
+      };
       fires.forEach((f) => {
         f.orb.addEventListener("pointerenter", (e) => {
-          if (e.pointerType !== "mouse") return;
-          from = performance.now();
-          held = a; grown = m; // a cursor that is still burning carries on from where it is
-          cf.ramp = f.ramp;
-          wall.dataset.flame = f.ice ? "ice" : "fire";
-          wake();
+          // No flame in the hands (doused, or still falling), nothing to catch.
+          if (e.pointerType !== "mouse" || !landed || down) return;
+          touch = false;
+          light(f);
         });
-        f.orb.addEventListener("pointerleave", () => {
-          if (!from) return;
-          const now = performance.now();
-          until = Math.max(until, now + Math.min((now - from) * PER, MAX));
-          held = a; grown = m;
-          from = 0;
-        });
+        f.orb.addEventListener("pointerleave", () => { if (!down) unlight(); });
       });
+      // What Tap and hold drives: the flame burns LIFT px above the finger.
+      const at = (X, Y) => { x = X; y = Y - LIFT; fy = Y; };
+      tc = {
+        start(f, X, Y) { touch = down = true; away = false; at(X, Y); px = x; v = 0; light(f); },
+        move: at,
+        end() { down = false; unlight(); },
+      };
+
+      /* Touch only, while the finger is on the screen (a mouse just moves the
+         flame; the wheel scrolls). Near the bottom, scroll down; near the top,
+         up. The finger counts, not the flame above it. The speed follows a
+         smooth curve from 0 at the strip's inner edge to CRAWL at the window's
+         edge, and the page eases into it and out of it (about 0.3 s), so it
+         never starts or stops with a jerk. sy is where the page should be, in
+         fractions of a pixel; it moves in device pixels, which keeps slow
+         speeds smooth on sharp screens. */
+      const scrollEdges = (dt) => {
+        const edge = Math.min(EDGE, innerHeight / 4);
+        const deep = Math.max(fy - (innerHeight - edge), 0) / edge - Math.max(edge - fy, 0) / edge; // -1 top … 1 bottom
+        const live = touch && down && a > 0.25;
+        const k = Math.min(Math.abs(deep), 1), want = live ? Math.sign(deep) * CRAWL * k * k * (3 - 2 * k) : 0;
+        sv += (want - sv) * Math.min(dt * 7, 1);
+        if (Math.abs(sv) < 0.5 && !want) { sv = 0; return; }
+        if (Math.abs(scrollY - sy) > 2) sy = scrollY; // first frame, or the visitor scrolled
+        const end = document.documentElement.scrollHeight - innerHeight;
+        sy = Math.max(0, Math.min(end, sy + sv * dt));
+        if (sy === 0 || sy === end) sv = 0;
+        const px = Math.round(sy * devicePixelRatio) / devicePixelRatio;
+        if (px !== scrollY) scrollTo({ top: px, behavior: "instant" });
+      };
+
+      // Doused: stop feeding it, so it goes out within OUT.
+      quench = () => { from = 0; until = Math.min(until, performance.now()); held = a; grown = m; };
 
       burn = (now, dt) => {
         const d = from ? (now - from) / 1000 : 0;
@@ -431,9 +536,10 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
           : now < until ? held
           : now < until + OUT ? held * (1 - (now - until) / OUT)
           : 0;
-        m = from ? Math.max(grown, Math.min(Math.max(d, 1), GROW)) : grown;
+        m = from ? Math.max(grown, Math.min(Math.max(d, 1), touch ? GROW_TOUCH : GROW)) : grown;
         hide(!away && a > 0.25);
         if (!a) { m = grown = 1; c.cv.style.opacity = wall.style.opacity = 0; return false; }
+        scrollEdges(dt);
         // Stay sharp as it grows: more pixels per step, at 1 per CSS pixel past 2×.
         if (Math.ceil(m) !== res) { res = Math.ceil(m); fitc(120 * res, 144 * res, res > 2 ? 1 : 1.5); }
         // Lean the flame away from the way the mouse moves.
@@ -461,18 +567,65 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
     new IntersectionObserver(([e]) => { onStage = e.isIntersecting; wake(); }).observe(stage);
     document.addEventListener("visibilitychange", wake);
 
-    // The cursor's context is made the first time a mouse enters the stage:
-    // most visitors never hover a flame, and a context takes up to 130 ms to
-    // make. The cursor fades in over a second, which hides the wait. Its canvas
-    // gets its size first, so it is allocated once. The same mouse starts the
-    // intro, so the cursor waits until the flames have landed: making it
-    // mid-fall would stutter the drop.
+    /* ---- Tap and hold (touch screens): the burning cursor for a finger.
+       Hold a flame for HOLD ms and a flame of that color lights just above the
+       finger. It follows the finger, the page stops scrolling under it, and
+       holding it near the top or bottom of the screen scrolls the page
+       (EDGE, CRAWL). Let go and it stays there, burning 3 s for every second
+       held, then goes out. A quick tap still opens the skills, and a swipe
+       that starts on a flame still scrolls. ---- */
+    const HOLD = 400; // ms
+    let hold = null, tc = null, swallow = 0; // tc: the cursor's touch controls, once it exists
+    const letGo = () => {
+      if (!hold) return;
+      clearTimeout(hold.timer);
+      // The tap a hold ends with mustn't open the skills.
+      if (hold.on) { if (tc) tc.end(); swallow = performance.now() + 600; }
+      hold = null;
+    };
+    fires.forEach((f) => {
+      f.orb.addEventListener("pointerdown", (e) => {
+        if (e.pointerType === "mouse" || !landed || hold) return;
+        arm(); // the hold covers the time the context takes
+        const h = (hold = { f, id: e.pointerId, x: e.clientX, y: e.clientY, on: false });
+        h.timer = setTimeout(() => { h.on = true; if (tc) tc.start(h.f, h.x, h.y); }, HOLD);
+      });
+      // Once lit, the finger moves the flame, not the page. Only on the flames:
+      // a touchmove listener that can cancel makes every scroll it covers wait.
+      f.orb.addEventListener("touchmove", (e) => { if (hold && hold.on) e.preventDefault(); }, { passive: false });
+      f.orb.addEventListener("contextmenu", (e) => { if (hold) e.preventDefault(); });
+    });
+    addEventListener("pointermove", (e) => {
+      if (!hold || e.pointerId !== hold.id) return;
+      // Moved before it lit: a swipe, so leave it to the page.
+      if (!hold.on) { if (Math.hypot(e.clientX - hold.x, e.clientY - hold.y) > 10) letGo(); return; }
+      hold.x = e.clientX; hold.y = e.clientY;
+      if (tc) tc.move(hold.x, hold.y);
+    }, { passive: true });
+    addEventListener("pointerup", (e) => { if (hold && e.pointerId === hold.id) letGo(); });
+    addEventListener("pointercancel", (e) => { if (hold && e.pointerId === hold.id) letGo(); });
+    addEventListener("click", (e) => {
+      if (performance.now() > swallow || !e.target.closest || !e.target.closest(".orb")) return;
+      swallow = 0;
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }, true);
+
+    // The cursor's context is made the first time a mouse enters the stage, or
+    // a finger touches a flame: most visitors never hover a flame, and a
+    // context takes up to 130 ms to make. The cursor fades in over a second,
+    // which hides the wait. Its canvas gets its size first, so it is allocated
+    // once. The same mouse starts the intro, so the cursor waits until the
+    // flames have landed: making it mid-fall would stutter the drop.
+    let armed = false;
     if (mouse) stage.addEventListener("pointerenter", () => {
       if (!landed) { then = arm; return; }
       arm();
     }, { once: true });
     function arm() {
       then = null;
+      if (armed) return;
+      armed = true;
       const ccv = document.createElement("canvas");
       const d = Math.min(devicePixelRatio || 1, 1.5);
       ccv.width = Math.round(120 * d); ccv.height = Math.round(144 * d);
@@ -481,8 +634,8 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
         if (!c.ready()) return requestAnimationFrame(go);
         if (!c.init()) return;
         cursor(c);
-        // Already on a flame by now? Light up as if the mouse had just arrived.
-        fires.forEach((f) => { if (f.orb.matches(":hover")) f.orb.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse" })); });
+        relight(); // already on a flame by now?
+        if (hold && hold.on) tc.start(hold.f, hold.x, hold.y); // a finger held on while it was made
       };
       if (c) go();
     }
