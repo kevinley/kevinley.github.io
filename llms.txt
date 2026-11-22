@@ -21,7 +21,7 @@ The site is one page, in English, German and French. The same content is on all 
 - 2. A quick review, for a fixed price of €500: the most important findings, sorted, in a few days.
 - 3. A second call to go through the findings.
 - 4. The deep review: every part of the code and the product, and a full plan in order of priority. Example: €3,500.
-- 5. Fixing it together, with the client or for them, with a price agreed before the fixes start. Example: deep review and fixes, €9,000.
+- 5. Fixing it together, with the client or for them, with a price agreed before the fixes start. Example: €9,000.
 - Scope and price are always agreed before work starts. A fixed project price is possible when the work is defined up front. He works on one project at a time, next to his main job.
 
 ## Who he is
