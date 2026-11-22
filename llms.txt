@@ -1,6 +1,6 @@
 # Kevin Ley
 
-> Kevin Ley is a senior full-stack engineer who reviews apps that founders built with AI tools such as Lovable, Bolt, Cursor or Claude. He takes a deep look at the code and the product, tries to break the app, sorts every finding by severity and delivers a plan in order of priority. €120 per hour, excluding VAT.
+> Kevin Ley is a senior full-stack engineer who reviews apps that founders built with AI tools such as Lovable, Bolt, Cursor or Claude. He takes a deep look at the code and the product, tries to break the app, sorts every finding by severity and delivers a plan in order of priority. Reviews from €500, excluding VAT.
 
 The site is one page, in English, German and French. The same content is on all three.
 
@@ -16,12 +16,12 @@ The site is one page, in English, German and French. The same content is on all 
 
 ## How a project runs, and what it costs
 
-- [Prices](https://kevinley.github.io/#prices): €120 per hour, excluding VAT. Every project starts small, and after each step the client decides whether to go further.
+- [Prices](https://kevinley.github.io/#prices): Prices exclude VAT. Every project starts small, and after each step the client decides whether to go further.
 - 1. A first call: getting to know each other, seeing the product, deciding what matters most.
-- 2. A quick review, for an entry price agreed first: the most important findings, sorted, in a few days. Example: about 8 hours, €960.
+- 2. A quick review, for a fixed price of €500: the most important findings, sorted, in a few days.
 - 3. A second call to go through the findings.
-- 4. The deep review: every part of the code and the product, and a full plan in order of priority. Example: about 30 hours, €3,600, days to weeks.
-- 5. Fixing it together, with the client or for them, at the same hourly rate. Example: deep review and fixes, about 80 hours, €9,600, weeks to months.
+- 4. The deep review: every part of the code and the product, and a full plan in order of priority. Example: €3,500, days to weeks.
+- 5. Fixing it together, with the client or for them, with a price agreed before the fixes start. Example: deep review and fixes, €9,000, weeks to months.
 - Scope and price are always agreed before work starts. A fixed project price is possible when the work is defined up front. He works on one project at a time, next to his main job.
 
 ## Who he is

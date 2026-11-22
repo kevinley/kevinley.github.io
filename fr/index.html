@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Audit de code pour les apps créées avec l’IA | Kevin Ley</title>
-<meta name="description" content="Votre app créée avec l’IA&#8239;? Kevin Ley, développeur full-stack senior, examine votre code, essaie de la casser et planifie les corrections. 120&nbsp;€/h hors TVA.">
+<meta name="description" content="Votre app créée avec l’IA&#8239;? Kevin Ley, développeur full-stack senior, examine votre code, essaie de la casser et planifie les corrections. Audit dès 500&nbsp;€ hors TVA.">
 <link rel="canonical" href="https://kevinley.github.io/fr/">
 <link rel="alternate" hreflang="en" href="https://kevinley.github.io/">
 <link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/">
@@ -41,7 +41,7 @@
 
 <link rel="preload" href="../fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/inter-tight-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../styles.css?v=9">
+<link rel="stylesheet" href="../styles.css?v=10">
 
 <script type="application/ld+json">
 {
@@ -86,8 +86,9 @@
             "itemOffered": {
               "@type": "Service",
               "name": "Audit express",
-              "description": "Un audit à un prix d’entrée convenu à l’avance : les constats les plus importants, classés par gravité, en quelques jours."
-            }
+              "description": "Un audit à prix fixe : les constats les plus importants, classés par gravité, en quelques jours."
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 500, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           },
           {
             "@type": "Offer",
@@ -95,21 +96,19 @@
               "@type": "Service",
               "name": "Audit approfondi",
               "description": "Un examen de chaque partie du code et du produit, avec un plan complet par ordre de priorité."
-            }
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 3500, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Corrections",
-              "description": "Corriger ce qui compte le plus, avec le fondateur ou pour lui, à 120 € de l’heure hors TVA."
-            }
+              "name": "Audit approfondi et corrections",
+              "description": "L’audit approfondi, puis la correction de ce qui compte le plus, avec le fondateur ou pour lui."
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 9000, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           }
         ]
-      },
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": { "@type": "UnitPriceSpecification", "price": 120, "priceCurrency": "EUR", "unitCode": "HUR", "valueAddedTaxIncluded": false }
       }
     },
     {
@@ -123,7 +122,7 @@
         { "@type": "Question", "name": "Est-ce un audit de sécurité ?", "acceptedAnswer": { "@type": "Answer", "text": "Non, ce n’est pas un test de sécurité certifié. Mais les problèmes de sécurité repérés pendant l’audit figurent dans le rapport." } },
         { "@type": "Question", "name": "Qu’advient-il de mon code ?", "acceptedAnswer": { "@type": "Answer", "text": "Kevin Ley signe un accord de confidentialité (NDA) si vous le souhaitez. Une fois le travail terminé, tout ce qui vous appartient vous est remis." } },
         { "@type": "Question", "name": "Combien de temps ça prend ?", "acceptedAnswer": { "@type": "Answer", "text": "Un audit express prend quelques jours. Un audit approfondi, de quelques jours à quelques semaines. Les corrections et la collaboration peuvent durer des semaines, voire des mois." } },
-        { "@type": "Question", "name": "Pouvez-vous aussi corriger les problèmes ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui, avec vous ou pour vous, au même tarif de 120 euros de l’heure, hors TVA." } }
+        { "@type": "Question", "name": "Pouvez-vous aussi corriger les problèmes ?", "acceptedAnswer": { "@type": "Answer", "text": "Oui, avec vous ou pour vous, et vous recevez un prix pour les corrections avant que je commence." } }
       ]
     }
   ]
@@ -359,7 +358,7 @@
 <section class="section" id="prices" aria-labelledby="prices-title">
   <div class="wrap">
     <h2 class="section__title" id="prices-title" data-reveal>Comment nous travaillons, et <em>ce que ça coûte</em>.</h2>
-    <p class="section__lede" data-reveal>120&nbsp;€ de l’heure, hors TVA. Chaque projet commence petit. Après chaque étape, vous décidez si nous allons plus loin.</p>
+    <p class="section__lede" data-reveal>Chaque projet commence petit. Après chaque étape, vous décidez si nous allons plus loin.</p>
     <ol class="steps" data-rail>
       <li class="step">
         <span class="step__node" aria-hidden="true">1</span>
@@ -372,8 +371,8 @@
         <span class="step__node" aria-hidden="true">2</span>
         <div class="step__main" data-reveal>
           <h3 class="step__title">Un audit express.</h3>
-          <p class="step__body">À un prix d’entrée convenu à l’avance. Je parcours votre app et vous livre les constats les plus importants, triés, en quelques jours.</p>
-          <p class="price"><span class="price__tag">Chaque projet commence ici</span><span class="price__sum">960&nbsp;€</span><span class="price__meta">Exemple · environ 8&nbsp;heures · quelques jours</span></p>
+          <p class="step__body">À un prix d’entrée fixe. Je parcours votre app et vous livre les constats les plus importants, triés, en quelques jours.</p>
+          <p class="price"><span class="price__tag">Chaque projet commence ici</span><span class="price__sum">500&nbsp;€</span><span class="price__meta">Prix fixe · quelques jours</span></p>
         </div>
       </li>
       <li class="step">
@@ -388,15 +387,15 @@
         <div class="step__main" data-reveal>
           <h3 class="step__title">L’audit approfondi.</h3>
           <p class="step__body">Je passe en revue chaque partie du code et du produit, et vous recevez un plan complet, classé par priorité.</p>
-          <p class="price"><span class="price__sum">3&#8239;600&nbsp;€</span><span class="price__meta">Exemple · environ 30&nbsp;heures · de quelques jours à quelques semaines</span></p>
+          <p class="price"><span class="price__sum">3&#8239;500&nbsp;€</span><span class="price__badge">Exemple</span><span class="price__meta">De quelques jours à quelques semaines</span></p>
         </div>
       </li>
       <li class="step">
         <span class="step__node" aria-hidden="true">5</span>
         <div class="step__main" data-reveal>
           <h3 class="step__title">Corriger ensemble.</h3>
-          <p class="step__body">Si vous le souhaitez, je corrige ce qui compte le plus, avec vous ou pour vous, au même tarif horaire. Nous pouvons continuer à travailler ensemble ensuite.</p>
-          <p class="price"><span class="price__sum">9&#8239;600&nbsp;€</span><span class="price__meta">Exemple · audit approfondi et corrections · environ 80&nbsp;heures · de quelques semaines à quelques mois</span></p>
+          <p class="step__body">Si vous le souhaitez, je corrige ce qui compte le plus, avec vous ou pour vous. Nous pouvons continuer à travailler ensemble ensuite.</p>
+          <p class="price"><span class="price__sum">9&#8239;000&nbsp;€</span><span class="price__badge">Exemple</span><span class="price__meta">Audit approfondi et corrections · de quelques semaines à quelques mois</span></p>
         </div>
       </li>
     </ol>
@@ -406,7 +405,7 @@
       <li>Votre budget définit le périmètre. J’adapte mon travail en conséquence et je commence par ce qui compte le plus.</li>
       <li>Je travaille sur un seul projet à la fois, en parallèle de mon emploi principal.</li>
     </ul>
-    <p class="note" data-reveal>Les prix sont des exemples pour vous donner une idée. Votre app et votre budget déterminent le nombre d’heures réel. Tous les prix s’entendent hors TVA.</p>
+    <p class="note" data-reveal>L’audit express a un prix fixe. Les autres prix sont des exemples pour vous donner une idée&nbsp;: votre app et votre budget déterminent le prix réel. Tous les prix s’entendent hors TVA.</p>
   </div>
 </section>
 
@@ -475,7 +474,7 @@
       </details>
       <details>
         <summary>Pouvez-vous aussi corriger les problèmes&#8239;?</summary>
-        <p>Oui, avec vous ou pour vous, au même tarif de 120&nbsp;€ de l’heure, hors TVA.</p>
+        <p>Oui, avec vous ou pour vous, et vous recevez un prix pour les corrections avant que je commence.</p>
       </details>
     </div>
   </div>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Code-Review für Apps, die mit KI gebaut wurden | Kevin Ley</title>
-<meta name="description" content="Mit KI gebaut? Kevin Ley, Senior Full-Stack-Entwickler, prüft den Code deiner App, versucht sie kaputt zu machen und plant die Reparatur. 120 €/h zzgl. MwSt.">
+<meta name="description" content="Mit KI gebaut? Kevin Ley, Senior Full-Stack-Entwickler, prüft den Code deiner App, versucht sie kaputt zu machen und plant die Reparatur. Check ab 500 € zzgl. MwSt.">
 <link rel="canonical" href="https://kevinley.github.io/de/">
 <link rel="alternate" hreflang="en" href="https://kevinley.github.io/">
 <link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/">
@@ -41,7 +41,7 @@
 
 <link rel="preload" href="../fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/inter-tight-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../styles.css?v=9">
+<link rel="stylesheet" href="../styles.css?v=10">
 
 <script type="application/ld+json">
 {
@@ -86,8 +86,9 @@
             "itemOffered": {
               "@type": "Service",
               "name": "Kurzer Check",
-              "description": "Ein Check zum vorher vereinbarten Einstiegspreis: die wichtigsten Befunde, nach Schweregrad sortiert, in wenigen Tagen."
-            }
+              "description": "Ein Check zum Festpreis: die wichtigsten Befunde, nach Schweregrad sortiert, in wenigen Tagen."
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 500, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           },
           {
             "@type": "Offer",
@@ -95,21 +96,19 @@
               "@type": "Service",
               "name": "Gründliche Prüfung",
               "description": "Eine Prüfung aller Teile von Code und Produkt, mit einem vollständigen Plan nach Priorität."
-            }
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 3500, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Reparaturen",
-              "description": "Das Wichtigste beheben, gemeinsam mit dem Gründer oder für ihn, zu 120 € pro Stunde zuzüglich Mehrwertsteuer."
-            }
+              "name": "Gründliche Prüfung und Reparaturen",
+              "description": "Die gründliche Prüfung, danach das Wichtigste beheben, gemeinsam mit dem Gründer oder für ihn."
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 9000, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           }
         ]
-      },
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": { "@type": "UnitPriceSpecification", "price": 120, "priceCurrency": "EUR", "unitCode": "HUR", "valueAddedTaxIncluded": false }
       }
     },
     {
@@ -123,7 +122,7 @@
         { "@type": "Question", "name": "Ist das ein Sicherheitsaudit?", "acceptedAnswer": { "@type": "Answer", "text": "Nein, es ist kein zertifizierter Sicherheitstest. Aber Sicherheitsprobleme, die bei der Prüfung auffallen, stehen im Bericht." } },
         { "@type": "Question", "name": "Was passiert mit meinem Code?", "acceptedAnswer": { "@type": "Answer", "text": "Kevin Ley unterschreibt auf Wunsch eine Geheimhaltungsvereinbarung (NDA). Wenn die Arbeit fertig ist, bekommst du alles übergeben, was dir gehört." } },
         { "@type": "Question", "name": "Wie lange dauert es?", "acceptedAnswer": { "@type": "Answer", "text": "Ein kurzer Check dauert ein paar Tage. Eine gründliche Prüfung dauert Tage bis Wochen. Reparaturen und die weitere Zusammenarbeit können Wochen oder Monate dauern." } },
-        { "@type": "Question", "name": "Kannst du die Probleme auch beheben?", "acceptedAnswer": { "@type": "Answer", "text": "Ja, mit dir oder für dich, zum selben Satz von 120 Euro pro Stunde zuzüglich Mehrwertsteuer." } }
+        { "@type": "Question", "name": "Kannst du die Probleme auch beheben?", "acceptedAnswer": { "@type": "Answer", "text": "Ja, mit dir oder für dich, und du bekommst einen Preis für die Reparaturen, bevor ich anfange." } }
       ]
     }
   ]
@@ -359,7 +358,7 @@
 <section class="section" id="prices" aria-labelledby="prices-title">
   <div class="wrap">
     <h2 class="section__title" id="prices-title" data-reveal>Wie wir arbeiten und <em>was es kostet</em>.</h2>
-    <p class="section__lede" data-reveal>120&nbsp;€ pro Stunde zzgl. MwSt. Jedes Projekt fängt klein an. Nach jedem Schritt entscheidest du, ob wir weitermachen.</p>
+    <p class="section__lede" data-reveal>Jedes Projekt fängt klein an. Nach jedem Schritt entscheidest du, ob wir weitermachen.</p>
     <ol class="steps" data-rail>
       <li class="step">
         <span class="step__node" aria-hidden="true">1</span>
@@ -372,8 +371,8 @@
         <span class="step__node" aria-hidden="true">2</span>
         <div class="step__main" data-reveal>
           <h3 class="step__title">Ein kurzer Check.</h3>
-          <p class="step__body">Zu einem Einstiegspreis, den wir vorher vereinbaren. Ich gehe deine App durch und liefere dir in wenigen Tagen die wichtigsten Befunde, sortiert.</p>
-          <p class="price"><span class="price__tag">Jedes Projekt beginnt hier</span><span class="price__sum">960&nbsp;€</span><span class="price__meta">Beispiel · etwa 8 Stunden · ein paar Tage</span></p>
+          <p class="step__body">Zu einem festen Einstiegspreis. Ich gehe deine App durch und liefere dir in wenigen Tagen die wichtigsten Befunde, sortiert.</p>
+          <p class="price"><span class="price__tag">Jedes Projekt beginnt hier</span><span class="price__sum">500&nbsp;€</span><span class="price__meta">Festpreis · ein paar Tage</span></p>
         </div>
       </li>
       <li class="step">
@@ -388,15 +387,15 @@
         <div class="step__main" data-reveal>
           <h3 class="step__title">Die gründliche Prüfung.</h3>
           <p class="step__body">Ich gehe jeden Teil des Codes und des Produkts durch, und du bekommst einen vollständigen Plan, nach Priorität geordnet.</p>
-          <p class="price"><span class="price__sum">3.600&nbsp;€</span><span class="price__meta">Beispiel · etwa 30 Stunden · Tage bis Wochen</span></p>
+          <p class="price"><span class="price__sum">3.500&nbsp;€</span><span class="price__badge">Beispiel</span><span class="price__meta">Tage bis Wochen</span></p>
         </div>
       </li>
       <li class="step">
         <span class="step__node" aria-hidden="true">5</span>
         <div class="step__main" data-reveal>
           <h3 class="step__title">Gemeinsam reparieren.</h3>
-          <p class="step__body">Wenn du willst, behebe ich das Wichtigste, mit dir oder für dich, zum selben Stundensatz. Danach können wir gern weiter zusammenarbeiten.</p>
-          <p class="price"><span class="price__sum">9.600&nbsp;€</span><span class="price__meta">Beispiel · gründliche Prüfung und Reparaturen · etwa 80 Stunden · Wochen bis Monate</span></p>
+          <p class="step__body">Wenn du willst, behebe ich das Wichtigste, mit dir oder für dich. Danach können wir gern weiter zusammenarbeiten.</p>
+          <p class="price"><span class="price__sum">9.000&nbsp;€</span><span class="price__badge">Beispiel</span><span class="price__meta">Gründliche Prüfung und Reparaturen · Wochen bis Monate</span></p>
         </div>
       </li>
     </ol>
@@ -406,7 +405,7 @@
       <li>Dein Budget bestimmt den Umfang. Ich richte meine Arbeit danach aus und fange mit dem Wichtigsten an.</li>
       <li>Ich arbeite immer nur an einem Projekt, neben meinem Hauptjob.</li>
     </ul>
-    <p class="note" data-reveal>Die Preise sind Beispiele, damit du eine Vorstellung bekommst. Die tatsächlichen Stunden hängen von deiner App und deinem Budget ab. Alle Preise zzgl. MwSt.</p>
+    <p class="note" data-reveal>Der kurze Check hat einen Festpreis. Die anderen Preise sind Beispiele, damit du eine Vorstellung bekommst: Der tatsächliche Preis hängt von deiner App und deinem Budget ab. Alle Preise zzgl. MwSt.</p>
   </div>
 </section>
 
@@ -475,7 +474,7 @@
       </details>
       <details>
         <summary>Kannst du die Probleme auch beheben?</summary>
-        <p>Ja, mit dir oder für dich, zum selben Satz von 120&nbsp;€ pro Stunde zzgl. MwSt.</p>
+        <p>Ja, mit dir oder für dich, und du bekommst einen Preis für die Reparaturen, bevor ich anfange.</p>
       </details>
     </div>
   </div>

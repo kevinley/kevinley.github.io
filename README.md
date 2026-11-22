@@ -57,7 +57,7 @@ Search for `TODO` in `index.html`, `de/index.html` and `fr/index.html`:
 
 ## Search engines and AI tools
 
-- **Structured data (JSON-LD, in each page's head):** `WebSite`, `Person` (photo, country, areas of expertise in `knowsAbout`), `Service` (hourly rate, the three offers in `hasOfferCatalog`) and `FAQPage`. The same facts as the visible page, in the page's language. When the page changes, change these too.
+- **Structured data (JSON-LD, in each page's head):** `WebSite`, `Person` (photo, country, areas of expertise in `knowsAbout`), `Service` (the three offers in `hasOfferCatalog`, each with its example price; no hourly rate is shown anywhere) and `FAQPage`. The same facts as the visible page, in the page's language. When the page changes, change these too.
 - **`llms.txt`:** a plain summary of the site for AI tools, with links to the three languages and the sections. Written only from what the page says; keep it in step.
 - **`robots.txt`:** everyone may crawl everything. AI search and answer crawlers (OpenAI, Anthropic, Perplexity) are named in their own group, so their access is explicit.
 - **Icons:** `favicon.ico` (16, 32, 48 px), `favicon.svg`, `apple-touch-icon.png` (180 px) and the icons in `site.webmanifest` (`assets/icon-*.png`).

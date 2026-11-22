@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>App reviews for founders who built with AI | Kevin Ley</title>
-<meta name="description" content="Built your app with AI? Senior full-stack engineer Kevin Ley takes a deep look at your code, tries to break your app and plans the fixes. €120/h excl. VAT.">
+<meta name="description" content="Built your app with AI? Senior full-stack engineer Kevin Ley takes a deep look at your code, tries to break your app and plans the fixes. Reviews from €500 excl. VAT.">
 <link rel="canonical" href="https://kevinley.github.io/">
 <link rel="alternate" hreflang="en" href="https://kevinley.github.io/">
 <link rel="alternate" hreflang="de" href="https://kevinley.github.io/de/">
@@ -41,7 +41,7 @@
 
 <link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/inter-tight-italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=9">
+<link rel="stylesheet" href="styles.css?v=10">
 
 <script type="application/ld+json">
 {
@@ -86,8 +86,9 @@
             "itemOffered": {
               "@type": "Service",
               "name": "Quick review",
-              "description": "An entry-price review: the most important findings, sorted by severity, in a few days."
-            }
+              "description": "A fixed-price review: the most important findings, sorted by severity, in a few days."
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 500, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           },
           {
             "@type": "Offer",
@@ -95,21 +96,19 @@
               "@type": "Service",
               "name": "Deep review",
               "description": "A review of every part of the code and the product, with a full plan in order of priority."
-            }
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 3500, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           },
           {
             "@type": "Offer",
             "itemOffered": {
               "@type": "Service",
-              "name": "Fixes",
-              "description": "Fixing what matters most, with the founder or for them, at €120 per hour excluding VAT."
-            }
+              "name": "Deep review and fixes",
+              "description": "The deep review, then fixing what matters most, with the founder or for them."
+            },
+            "priceSpecification": { "@type": "PriceSpecification", "price": 9000, "priceCurrency": "EUR", "valueAddedTaxIncluded": false }
           }
         ]
-      },
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": { "@type": "UnitPriceSpecification", "price": 120, "priceCurrency": "EUR", "unitCode": "HUR", "valueAddedTaxIncluded": false }
       }
     },
     {
@@ -122,7 +121,7 @@
         { "@type": "Question", "name": "Is this a security audit?", "acceptedAnswer": { "@type": "Answer", "text": "No, it is not a certified security test. But security problems found during the review are included in the report." } },
         { "@type": "Question", "name": "What happens to my code?", "acceptedAnswer": { "@type": "Answer", "text": "Kevin Ley signs an NDA if you want one. When the work is done, everything that is yours is handed over to you." } },
         { "@type": "Question", "name": "How long does it take?", "acceptedAnswer": { "@type": "Answer", "text": "A quick review takes a few days. A deep review takes days to weeks. Fixing things and working together can run for weeks or months." } },
-        { "@type": "Question", "name": "Can you fix the problems too?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, with you or for you, at the same rate of 120 euros per hour, excluding VAT." } }
+        { "@type": "Question", "name": "Can you fix the problems too?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, with you or for you, and you get a price for the fixes before I start." } }
       ]
     }
   ]
@@ -358,7 +357,7 @@
 <section class="section" id="prices" aria-labelledby="prices-title">
   <div class="wrap">
     <h2 class="section__title" id="prices-title" data-reveal>How we work, and <em>what it costs</em>.</h2>
-    <p class="section__lede" data-reveal>€120 per hour, excluding VAT. Every project starts small. After each step, you decide if we go further.</p>
+    <p class="section__lede" data-reveal>Every project starts small. After each step, you decide if we go further.</p>
     <ol class="steps" data-rail>
       <li class="step">
         <span class="step__node" aria-hidden="true">1</span>
@@ -371,8 +370,8 @@
         <span class="step__node" aria-hidden="true">2</span>
         <div class="step__main" data-reveal>
           <h3 class="step__title">A quick review.</h3>
-          <p class="step__body">For an entry price we agree on first. I go through your app and deliver the most important findings, sorted, in a few days.</p>
-          <p class="price"><span class="price__tag">Every project starts here</span><span class="price__sum">€960</span><span class="price__meta">Example · about 8 hours · a few days</span></p>
+          <p class="step__body">For a fixed entry price. I go through your app and deliver the most important findings, sorted, in a few days.</p>
+          <p class="price"><span class="price__tag">Every project starts here</span><span class="price__sum">€500</span><span class="price__meta">Fixed price · a few days</span></p>
         </div>
       </li>
       <li class="step">
@@ -387,15 +386,15 @@
         <div class="step__main" data-reveal>
           <h3 class="step__title">The deep review.</h3>
           <p class="step__body">I go through every part of the code and the product, and you get a full plan in order of priority.</p>
-          <p class="price"><span class="price__sum">€3,600</span><span class="price__meta">Example · about 30 hours · days to weeks</span></p>
+          <p class="price"><span class="price__sum">€3,500</span><span class="price__badge">Example</span><span class="price__meta">Days to weeks</span></p>
         </div>
       </li>
       <li class="step">
         <span class="step__node" aria-hidden="true">5</span>
         <div class="step__main" data-reveal>
           <h3 class="step__title">Fixing it together.</h3>
-          <p class="step__body">If you want, I fix what matters most, with you or for you, at the same hourly rate. We can keep working together after that.</p>
-          <p class="price"><span class="price__sum">€9,600</span><span class="price__meta">Example · deep review and fixes · about 80 hours · weeks to months</span></p>
+          <p class="step__body">If you want, I fix what matters most, with you or for you. We can keep working together after that.</p>
+          <p class="price"><span class="price__sum">€9,000</span><span class="price__badge">Example</span><span class="price__meta">Deep review and fixes · weeks to months</span></p>
         </div>
       </li>
     </ol>
@@ -405,7 +404,7 @@
       <li>Your budget decides the scope. I change what I work on to fit it, and start with what matters most.</li>
       <li>I work on one project at a time, next to my main job.</li>
     </ul>
-    <p class="note" data-reveal>The prices are examples to give you an idea. Your app and your budget decide the real hours. All prices exclude VAT.</p>
+    <p class="note" data-reveal>The quick review has a fixed price. The other prices are examples to give you an idea: your app and your budget decide the real price. All prices exclude VAT.</p>
   </div>
 </section>
 
@@ -474,7 +473,7 @@
       </details>
       <details>
         <summary>Can you fix the problems too?</summary>
-        <p>Yes, with you or for you, at the same rate of €120 per hour, excluding VAT.</p>
+        <p>Yes, with you or for you, and you get a price for the fixes before I start.</p>
       </details>
     </div>
   </div>
