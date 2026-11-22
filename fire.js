@@ -360,8 +360,9 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
        and hold). ---- */
     const PER = 3, MAX = 30000, OUT = 1000, GROW = 5;
     // Touch: how far above the finger the flame burns (px), so the finger
-    // doesn't hide it, and how big it may grow on a small screen.
-    const LIFT = 60, GROW_TOUCH = 3;
+    // doesn't hide it, how big it may grow on a small screen, and how fast it
+    // goes out once the finger lets go (ms).
+    const LIFT = 60, GROW_TOUCH = 3, OUT_TOUCH = 350;
     // Touch only: the strips at the bottom and top that scroll while a finger
     // holds the flame there: their height (px, at most a quarter of the
     // window) and the speed at the window's edge (px/s), from 0 at the
@@ -500,7 +501,8 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       tc = {
         start(f, X, Y) { touch = down = true; away = false; at(X, Y); px = x; v = 0; light(f); },
         move: at,
-        end() { down = false; unlight(); },
+        // Let go: it goes out at once, shrinking as it fades (OUT_TOUCH).
+        end() { down = false; from = 0; until = performance.now(); held = a; grown = m; },
       };
 
       /* Touch only, while the finger is on the screen (a mouse just moves the
@@ -532,9 +534,10 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
       burn = (now, dt) => {
         const d = from ? (now - from) / 1000 : 0;
         // a: how alight the cursor is, 0 to 1. m: how big it has grown, 1× to 5×.
+        const out = touch ? OUT_TOUCH : OUT;
         a = from ? Math.max(held, 1 - (1 - Math.min(d, 1)) ** 2)
           : now < until ? held
-          : now < until + OUT ? held * (1 - (now - until) / OUT)
+          : now < until + out ? held * (1 - (now - until) / out)
           : 0;
         m = from ? Math.max(grown, Math.min(Math.max(d, 1), touch ? GROW_TOUCH : GROW)) : grown;
         hide(!away && a > 0.25);
@@ -571,9 +574,9 @@ gl_FragColor=vec4(o,max(o.r,max(o.g,o.b)));}`;
        Hold a flame for HOLD ms and a flame of that color lights just above the
        finger. It follows the finger, the page stops scrolling under it, and
        holding it near the top or bottom of the screen scrolls the page
-       (EDGE, CRAWL). Let go and it stays there, burning 3 s for every second
-       held, then goes out. A quick tap still opens the skills, and a swipe
-       that starts on a flame still scrolls. ---- */
+       (EDGE, CRAWL). Let go and it goes out, shrinking as it fades. A quick
+       tap still opens the skills, and a swipe that starts on a flame still
+       scrolls. ---- */
     const HOLD = 400; // ms
     let hold = null, tc = null, swallow = 0; // tc: the cursor's touch controls, once it exists
     const letGo = () => {
